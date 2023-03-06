@@ -27,10 +27,26 @@ const addUser = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params._id);
+    return res.status(200).send(user);
+  } catch (e) {
+    res.status(500).send({ error: e });
+  }
+};
 
 
+const getUsersList= async(req,res)=>{
+try{
+  const users = await User.find().select('firstName password email role');
+  res.send(users);
+}catch(e){
+  res.status(500).send({error:e})
+}
+}
 
 
 module.exports = {
-  addUser
+  addUser,getUserById,getUsersList
 };
