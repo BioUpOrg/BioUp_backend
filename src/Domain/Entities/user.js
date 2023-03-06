@@ -1,10 +1,7 @@
 class User {
-  constructor({ firstName, email,password,isActivated,role }) {
-    this.firstName = firstName;
+  constructor({ name, email }) {
+    this.name = name;
     this.email = email;
-    this.password = password;
-    this.isActivated = isActivated;
-    this.role = role;
   }
 }
 
