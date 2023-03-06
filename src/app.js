@@ -134,7 +134,6 @@ var productsRouter = require('./Presentation/routes/products');
 
 // Set up database connection
 const mongoose = require('mongoose');
-require('dotenv').config({ path: `${__dirname}/.env` });
 mongoose.connect(
   // `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_CLUSTER}/?retryWrites=true&w=majority`,
   'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
