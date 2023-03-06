@@ -46,7 +46,21 @@ try{
 }
 }
 
+//Desactivate User Account
+
+const DesactivateUserAccount = async (req, res) => {
+  const user = await User.findById(req.params._id);
+  try {
+    user.isActivated = false;
+    await user.save();
+    res.status(200).send({ message: 'Action completed successfully!' });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+};
+
+
 
 module.exports = {
-  addUser,getUserById,getUsersList
+  addUser,getUserById,getUsersList,DesactivateUserAccount
 };

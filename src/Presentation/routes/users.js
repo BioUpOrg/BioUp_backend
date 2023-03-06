@@ -7,8 +7,13 @@ const User = require('../../Infrastructure/Models/userModel');
 
 //Create New User
 router.post('/auth/', userController.addUser);
+//Desactivate User Account
 
-
+router.patch(
+  '/desactivate/:_id',
+  auth,
+  userController.DesactivateUserAccount
+);
 
 
 //Get all users
