@@ -1,26 +1,21 @@
 const userService = require('../../Application/UseCases/user/userService');
 const User = require('../../Infrastructure/Models/userModel');
 const utils=require('../../Presentation/utils/verifaccountutils');
-const sendEmail=require('../../Presentation/middlwares/sendEmail');
 const getSmsToken=require('../../Presentation/middlwares/getSmsToken');
-
+const userServ =require('../../Application/UseCases/user/userService');
 
  const sendActivateCodeMail = async (req, res) => {
   try{
-   const activationCode =utils.getActivationCode(); 
-  // const expireDate=utils.getActivationCodeExpDate();
-   const mail=req.params.mail;
-   const update= {activationCode:activationCode};
-   const user= await User.findOneAndUpdate({email:mail},update,{new:true});
-   const token=utils.generateActivationtoken(mail,activationCode);
-   const URL_ACTIVE_ACCOUNT='http://localhost:3000/users/check/activate/account/'+token;
-   await sendEmail(mail,URL_ACTIVE_ACCOUNT);
+    console.log(req.params.mail);
+      const user =await userServ.activationMail(req.params.mail);
+      console.log(user);
    res.status(200).send(user);
 }
 
 catch(e){
  res.status(500).send('error updating activation code '+e);
-}}
+}
+}
 
 
 
