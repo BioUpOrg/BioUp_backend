@@ -11,10 +11,11 @@ router.post('/auth/', userController.addUser);
 
 
 
+//Get all users
+router.get('/list',auth,userController.getUsersList)
 
-
-
-
+//Consult User
+router.get('/:_id',auth, userController.getUserById);
 
 router.get('/', function(req, res, next) {
   res.send('users list page !');
