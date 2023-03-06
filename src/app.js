@@ -140,10 +140,7 @@ mongoose.connect(
   'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
   console.log('connected to database !!!!'),
 {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
+    useNewUrlParser: true
   }
 );
 
