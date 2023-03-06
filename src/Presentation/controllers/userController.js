@@ -2,7 +2,7 @@ const userService = require('../../Application/UseCases/user/userService');
 const User = require('../../Infrastructure/Models/userModel');
 const utils=require('../../Presentation/utils/verifaccountutils');
 const sendEmail=require('../../Presentation/middlwares/sendEmail');
-
+const getSmsToken=require('../../Presentation/middlwares/getSmsToken');
 
 
  const sendActivateCodeMail = async (req, res) => {
@@ -48,9 +48,39 @@ const verifyAccountMail=  async (req, res) => {
   }
 }
 
+const sendActivateCodeSmS= async (req, res) => {
+  try{
+    const activationcode =utils.getActivationCode(); 
+    const phone=req.params.phone;
+    const update= {activationCode:activationcode};
+    const user= await User.findOneAndUpdate({phone:phone},update,{new:true});
+    const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
+    const context_activation_via_sms='please use this code in bio up  website to activate your account ';
+    await getSmsToken(clientId,phone,activationcode,context_activation_via_sms);
+    res.status(200).send(user);
+}
+catch(e){
+  res.status(500).send('error get token '+e);
+}
+}
 
+
+const verifyAccountSms = async (req, res) => {
+  const smscode = req.params.smscode;
+  if (smscode) {
+    const user = await User.findOne({activationCode:smscode}); 
+    if (user) {
+      user.statusActivation = true;
+      await user.save();
+      res.status(200).send(user);
+    }else{
+      res.status(403).send({err: 'activation code invalid'});
+    }
+  }
+   
+}
 
 
 module.exports = {
-  sendActivateCodeMail,verifyAccountMail
+  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms
 };
