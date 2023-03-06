@@ -3,12 +3,16 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
-
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },
+  phone:{ type: String,default:''},
+  createdAt: { type: Date, default: Date.now },
+  lastLoginAt: { type: Date ,default:''},
+  activationCode:{type :String,default:''},
   isActivated: { type: Boolean, default: true },
+  statusActivation:{type:Boolean,default:false},
   role: { type: String, default: 'user' },
 
   tokens: [
