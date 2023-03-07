@@ -2,6 +2,8 @@ const userRepository = require('../../../Domain/IRepositories/UserRepository');
 const utils=require('../../../Presentation/utils/verifaccountutils');
 const sendEmail=require('../../../Presentation/middlwares/sendEmail');
 const User =require('../../../Infrastructure/Models/userModel');
+const { sendActivateCodeSmS } = require('../../../Presentation/controllers/userController');
+const getSmsToken = require('../../../Presentation/middlwares/getSmsToken');
 const addUser = async (user) => {
   try {
     return await userRepository.create(user);
@@ -24,8 +26,84 @@ const activationMail = async (mail)=>{
    return user;
 }
 
+const verifyActivationCodeMail = async (token)=>{
+  console.log(token);
+  const result = utils.decryptActivateToken(token);
+  console.log(result);
+ 
+    const email = result.email;
+    console.log(email);
+    const user = await User.findOne({email: email});
+    console.log(user.activationCode);
+    console.log(result.activationCode);
+    if (user.activationCode===result.activationCode) {
+      user.statusActivation=true;
+      await user.save();
+      return user ;
+    } else {
+      res.status(403).send({err: 'activation code invalid'});
+      
+    }
+}
+
+ const sendCodeRecPassSms = async (phone) =>{
+ const number =phone;
+ console.log(number);
+ const coderecp= await utils.getActivationCode();
+const update={codeRecuperation:coderecp};
+ const user = await User.findOneAndUpdate({phone:number},update,{new:true});
+    const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
+    const context_activation_via_sms='please use this code in bio up  website to Create a new Password  ';
+      await getSmsToken(clientId,number,coderecp,context_activation_via_sms);
+      await user.save();
+      return user ;
+
+ }
+
+ const verifyCodeRecPassSms = async (phone, code) => {
+  const user = await User.findOne({ phone });
+  if (!user) {
+    throw new Error('User not found');
+  }
+  if (user.codeRecuperation !== code) {
+    throw new Error('Invalid code');
+  }
+  else{
+    user.codeRecuperation="1";
+    user.save();
+  }
+  return user;
+};
+   const changedPass=async (number,password)=>{
+    console.log(number);
+    console.log(password);
+    if(number){
+      
+        const user=await User.findOne({phone:number});
+        
+        if(user){
+          if(user.codeRecuperation !=="1"){
+            return ('you must verify the code first !');
+          }
+          if(user.codeRecuperation =="1"){
+            user.password=password; 
+            user.save();
+            return user;
+           }
+          
+        }
+       
+  
+    }
+    
+  }
+
+
+
+
 
 module.exports = {
-  addUser,activationMail
+  addUser,activationMail,verifyActivationCodeMail,
+  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass
 };
 

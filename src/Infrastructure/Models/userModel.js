@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   activationCode:{type :String,default:''},
   //codeExpireDate:{type:String},
   statusActivation:{type:Boolean,default:false},
+  codeRecuperation: {type:String, default:''},
   tokens: [
     {
       token: {
