@@ -23,7 +23,7 @@ router.get('/list',auth,userController.getUsersList)
 router.get('/:_id',auth, userController.getUserById);
 
 router.get('/', function(req, res, next) {
-  res.send('users list page !');
+  res.send('users list page !'); 
 });
 
 module.exports = router;
