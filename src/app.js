@@ -142,6 +142,7 @@ app.use(cookieSession({
 	name: 'google-auth-session',
 	keys: ['key1', 'key2']
 }));
+//
 app.use(passport.initialize());
 app.use(passport.session());
 // Set up database connection
