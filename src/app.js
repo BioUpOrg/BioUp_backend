@@ -136,6 +136,7 @@ var googleRouter = require('./Presentation/routes/googleAuth');
 var usersRouter = require('./Presentation/routes/users');
 var productsRouter = require('./Presentation/routes/products');
 var googleRouter = require('./Presentation/routes/googleAuth');
+var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 
 app.use(cookieSession({
 	name: 'google-auth-session',
@@ -169,6 +170,7 @@ app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
 app.use('/', googleRouter);
+app.use('/forget', forgetPasswordMail)
 
 //
 
