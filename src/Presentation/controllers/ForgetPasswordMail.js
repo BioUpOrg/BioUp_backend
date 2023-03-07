@@ -12,6 +12,7 @@ const transporter = nodemailer.createTransport({
     }
   });
   //
+  //
   // Generate a random verification code
   const verificationCode = crypto.randomBytes(3).toString('hex'); // 3 bytes will generate a 6-digit hex code
   
