@@ -156,6 +156,10 @@ mongoose.connect(
 app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
+app.use('/google', googleRouter);
+app.use('/', googleRouter);
+
+//
 
 
 // app.use(userRoutes);
