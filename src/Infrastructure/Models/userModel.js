@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },
-  name: { type: String, required: true },
   phone:{ type: String,default:''},
   createdAt: { type: Date, default: Date.now },
   lastLoginAt: { type: Date ,default:''},
@@ -15,8 +14,6 @@ const userSchema = new mongoose.Schema({
   isActivated: { type: Boolean, default: true },
   statusActivation:{type:Boolean,default:false},
   role: { type: String, default: 'user' },
-  pic : { type: String, required: false },
-
 
   tokens: [
     {

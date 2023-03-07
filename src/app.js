@@ -129,20 +129,9 @@ const express = require('express');
 // const UserModel = require('./Infrastructure/Models/UserModel');
 
 const app = express();
-const passport = require('passport');
-const cookieSession = require('cookie-session');
-require('./Presentation/middlwares/passport');
-var googleRouter = require('./Presentation/routes/googleAuth');
 var usersRouter = require('./Presentation/routes/users');
 var productsRouter = require('./Presentation/routes/products');
-var googleRouter = require('./Presentation/routes/googleAuth');
 
-app.use(cookieSession({
-	name: 'google-auth-session',
-	keys: ['key1', 'key2']
-}));
-app.use(passport.initialize());
-app.use(passport.session());
 // Set up database connection
 const mongoose = require('mongoose');
 mongoose.connect(

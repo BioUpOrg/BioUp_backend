@@ -30,7 +30,7 @@ googleRouter.get('/auth/callback/success' , (req , res) => {
 googleRouter.get('/auth/callback/failure' , (req , res) => {
 	res.send("Error");
 })
-//
+
 googleRouter.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
