@@ -131,7 +131,16 @@ const express = require('express');
 const app = express();
 var usersRouter = require('./Presentation/routes/users');
 var productsRouter = require('./Presentation/routes/products');
+var googleRouter = require('./Presentation/routes/googleAuth');
+var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 
+app.use(cookieSession({
+	name: 'google-auth-session',
+	keys: ['key1', 'key2']
+}));
+//
+app.use(passport.initialize());
+app.use(passport.session());
 // Set up database connection
 const mongoose = require('mongoose');
 mongoose.connect(
@@ -158,10 +167,11 @@ app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
 app.use('/', googleRouter);
+app.use('/forget', forgetPasswordMail)
 
 //
 
-
+//
 // app.use(userRoutes);
 
 // Start the server
