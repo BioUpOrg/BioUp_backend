@@ -11,36 +11,21 @@ const userServ =require('../../Application/UseCases/user/userService');
       console.log(user);
    res.status(200).send(user);
 }
-
 catch(e){
  res.status(500).send('error updating activation code '+e);
 }
 }
 
+const verifyAccountMail =  async (req, res) => {
+  try{
+    const user =await userServ.verifyActivationCodeMail(req.params.token); 
+    console.log(user);
+    res.status(200).send(user);
 
-
-const verifyAccountMail=  async (req, res) => {
-  const token = req.params.token;
-  console.log(token);
-  const result = utils.decryptActivateToken(token);
-  console.log(result);
-  if
-   (result) {
-    const email = result.email;
-    console.log(email);
-    const user = await User.findOne({email: email});
-    console.log(user.activationCode);
-    console.log(result.activationCode);
-    if (user.activationCode===result.activationCode) {
-      user.statusActivation=true;
-      await user.save();
-      res.status(200).send(user);
-    } else {
-      res.status(403).send({err: 'activation code invalid'});
-    }
-  } else {
-    res.status(500).send('link expired');
+  }catch(e){
+    res.status(500).send('link expire '+e);
   }
+ 
 }
 
 const sendActivateCodeSmS= async (req, res) => {
@@ -53,6 +38,7 @@ const sendActivateCodeSmS= async (req, res) => {
     const context_activation_via_sms='please use this code in bio up  website to activate your account ';
     await getSmsToken(clientId,phone,activationcode,context_activation_via_sms);
     res.status(200).send(user);
+    
 }
 catch(e){
   res.status(500).send('error get token '+e);
@@ -74,8 +60,37 @@ const verifyAccountSms = async (req, res) => {
   }
    
 }
+const sendCodeRecBySms =async (req,res)=>{
+  try{
+    const user = await userServ.sendCodeRecPassSms(req.params.phone);
+    console.log(user);
+    res.status(200).send(user);
+  }catch(e){
+    res.status(500).send('error get token '+e);
+  }
+}
 
+const verifyCodeRecBySms = async (req, res) => {
+  const { phone, code } = req.body;
+  try {
+    const user = await userServ.verifyCodeRecPassSms(phone, code);
+    res.status(200).send(user);
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+};
+
+const changePass =async (req,res)=>{
+  const {phone,password}=req.body;
+  try {
+    const user = await userServ.changedPass(phone,password);
+    res.status(200).send(user);
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+}
 
 module.exports = {
-  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms
+  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
+  sendCodeRecBySms,verifyCodeRecBySms,changePass
 };
