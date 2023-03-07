@@ -131,8 +131,12 @@ const express = require('express');
 const app = express();
 var usersRouter = require('./Presentation/routes/users');
 var productsRouter = require('./Presentation/routes/products');
+var fbRouter = require('./Presentation/routes/fb');
 var googleRouter = require('./Presentation/routes/googleAuth');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
+var cookieSession = require('cookie-session');
+const  passport = require ("passport");
+const { json } = require( "body-parser");
 
 app.use(cookieSession({
 	name: 'google-auth-session',
@@ -142,6 +146,20 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 // Set up database connection
+app.use(passport.initialize());
+app.use(json());
+app.set("view engine","ejs")
+const session = require('express-session')
+const cookieParser = require('cookie-parser')
+
+
+
+app.set("view engine","ejs")
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));
+app.use(passport.initialize());
+    app.use(passport.session()); 
+    app.use(cookieParser());
+
 const mongoose = require('mongoose');
 mongoose.connect(
   // `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_CLUSTER}/?retryWrites=true&w=majority`,
@@ -168,6 +186,7 @@ app.use('/products', productsRouter);
 app.use('/google', googleRouter);
 app.use('/', googleRouter);
 app.use('/forget', forgetPasswordMail)
+app.use('/fb', fbRouter);
 
 //
 
