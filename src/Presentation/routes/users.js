@@ -35,4 +35,7 @@ router.get('/', function(req, res, next) {
   res.send('users list page !'); 
 });
 
+//login
+router.post('/login', userController.login);
+
 module.exports = router;
