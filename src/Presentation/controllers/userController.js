@@ -1,5 +1,97 @@
 const userService = require('../../Application/UseCases/user/userService');
 const User = require('../../Infrastructure/Models/userModel');
+const utils=require('../../Presentation/utils/verifaccountutils');
+const getSmsToken=require('../../Presentation/middlwares/getSmsToken');
+const userServ =require('../../Application/UseCases/user/userService');
+
+ const sendActivateCodeMail = async (req, res) => {
+  try{
+    console.log(req.params.mail);
+      const user =await userServ.activationMail(req.params.mail);
+      console.log(user);
+   res.status(200).send(user);
+}
+catch(e){
+ res.status(500).send('error updating activation code '+e);
+}
+}
+
+const verifyAccountMail =  async (req, res) => {
+  try{
+    const user =await userServ.verifyActivationCodeMail(req.params.token); 
+    console.log(user);
+    res.status(200).send(user);
+
+    //
+  }catch(e){
+    res.status(500).send('link expire '+e);
+  }
+ 
+}
+
+const sendActivateCodeSmS= async (req, res) => {
+  try{
+    const activationcode =utils.getActivationCode(); 
+    const phone=req.params.phone;
+    const update= {activationCode:activationcode};
+    const user= await User.findOneAndUpdate({phone:phone},update,{new:true});
+    const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
+    const context_activation_via_sms='please use this code in bio up  website to activate your account ';
+    await getSmsToken(clientId,phone,activationcode,context_activation_via_sms);
+    res.status(200).send(user);
+    
+}
+catch(e){
+  res.status(500).send('error get token '+e);
+}
+}
+
+
+const verifyAccountSms = async (req, res) => {
+  const smscode = req.params.smscode;
+  if (smscode) {
+    const user = await User.findOne({activationCode:smscode}); 
+    if (user) {
+      user.statusActivation = true;
+      await user.save();
+      res.status(200).send(user);
+    }else{
+      res.status(403).send({err: 'activation code invalid'});
+    }
+  }
+   
+}
+const sendCodeRecBySms =async (req,res)=>{
+  try{
+    const user = await userServ.sendCodeRecPassSms(req.params.phone);
+    console.log(user);
+    res.status(200).send(user);
+  }catch(e){
+    res.status(500).send('error get token '+e);
+  }
+}
+
+const verifyCodeRecBySms = async (req, res) => {
+  const { phone, code } = req.body;
+  try {
+    const user = await userServ.verifyCodeRecPassSms(phone, code);
+    res.status(200).send(user);
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+};
+
+const changePass =async (req,res)=>{
+  const {phone,password}=req.body;
+  try {
+    const user = await userServ.changedPass(phone,password);
+    res.status(200).send(user);
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+}
+
+ 
 
 
 
@@ -34,7 +126,7 @@ const getUserById = async (req, res) => {
   } catch (e) {
     res.status(500).send({ error: e });
   }
-};
+}
 
 
 const getUsersList= async(req,res)=>{
@@ -57,10 +149,11 @@ const DesactivateUserAccount = async (req, res) => {
   } catch (e) {
     res.status(400).send(e);
   }
-};
+}
 
 
 
 module.exports = {
-  addUser,getUserById,getUsersList,DesactivateUserAccount
+  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
+sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser
 };
