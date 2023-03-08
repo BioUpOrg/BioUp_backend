@@ -22,6 +22,7 @@ const verifyAccountMail =  async (req, res) => {
     console.log(user);
     res.status(200).send(user);
 
+    //
   }catch(e){
     res.status(500).send('link expire '+e);
   }

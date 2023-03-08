@@ -4,7 +4,7 @@ const userController = require('../controllers/userController');
 const auth = require('../middlwares/auth');
 const User = require('../../Infrastructure/Models/userModel');
 
-<<<<<<< HEAD
+
 router.put('/updateactivationcode/:mail',userController.sendActivateCodeMail);
 router.get('/check/activate/account/:token',userController.verifyAccountMail);
 router.put('/updateactivationcodesms/:phone',userController.sendActivateCodeSmS);
@@ -13,8 +13,6 @@ router.put('/updateCodeRecupPassBySms/:phone',userController.sendCodeRecBySms);
 router.get('/check/activate/codeRecupPassBySms/',userController.verifyCodeRecBySms);
 router.put('/changepassword/',userController.changePass);
 
-=======
->>>>>>> 5273057fa257dc8de906517b23e49790496b542b
 
 //Create New User
 router.post('/auth/', userController.addUser);
