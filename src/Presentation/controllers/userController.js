@@ -18,6 +18,19 @@ const login = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    tokens= req.user.tokens;
+    token = req.token;
+    await userService.userLogout(tokens, token);
+    await req.user.save();
+    res.status(200).send();
+  } catch (e) {
+    console.log(e);
+    res.status(500).send();
+  }
+}
+
  const sendActivateCodeMail = async (req, res) => {
   try{
     console.log(req.params.mail);
@@ -168,7 +181,7 @@ const DesactivateUserAccount = async (req, res) => {
 
 
 module.exports = {
-  login,
+  login,logout,
   sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
 sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser
 };

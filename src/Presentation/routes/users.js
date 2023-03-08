@@ -38,4 +38,7 @@ router.get('/', function(req, res, next) {
 //login
 router.post('/login', userController.login);
 
+//logout
+router.post('/logout', auth, userController.logout);
+
 module.exports = router;

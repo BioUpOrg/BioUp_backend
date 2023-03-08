@@ -19,6 +19,13 @@ const userLogin= async (user) => {
   return token ;
 }
 
+const userLogout= async (tokens, token)=>{
+  tokens = tokens.filter(
+    (t) => t.token !== token
+  );
+}
+
+
 const activationMail = async (mail)=>{
   console.log(mail);
   const activationCode =utils.getActivationCode(); 
@@ -109,7 +116,7 @@ const update={codeRecuperation:coderecp};
 
 
 module.exports = {
-  addUser,userLogin,activationMail,verifyActivationCodeMail,
+  addUser,userLogin,userLogout, activationMail,verifyActivationCodeMail,
   sendCodeRecPassSms,verifyCodeRecPassSms,changedPass
 };
 
