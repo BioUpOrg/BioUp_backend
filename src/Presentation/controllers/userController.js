@@ -121,6 +121,7 @@ const addUser = async (req, res) => {
       ...req.body,
     });
     await user.save();
+    await userServ.activationMail(req.body.email);
     const token = await user.generateAuthToken();
     res
       .header('x-auth-token', token)
