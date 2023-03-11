@@ -129,33 +129,14 @@ const express = require('express');
 // const UserModel = require('./Infrastructure/Models/UserModel');
 
 const app = express();
+const passport = require('passport');
+const cookieSession = require('cookie-session');
 require('./Presentation/middlwares/passport');
 
 
 var usersRouter = require('./Presentation/routes/users');
-
 var productsRouter = require('./Presentation/routes/products');
-
-var fbRouter = require('./Presentation/routes/fb');
-var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
-var cookieSession = require('cookie-session');//
-const  passport = require ("passport");
-
-const { json } = require( "body-parser");
-const  passport = require ("passport");
-app.use(passport.initialize());
-app.use(json());
-app.set("view engine","ejs")
-const session = require('express-session')
-const cookieParser = require('cookie-parser')
-
-
-
-app.set("view engine","ejs")
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));
-app.use(passport.initialize());
-    app.use(passport.session()); 
-    app.use(cookieParser());
+var googleRouter = require('./Presentation/routes/googleAuth');
 
 // Set up database connection
 const mongoose = require('mongoose');
@@ -166,7 +147,10 @@ mongoose.connect(
   'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
   console.log('connected to database !!!!'),
 {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
   }
 );
 app.use(cookieSession({
@@ -186,13 +170,10 @@ app.use(passport.session());
 // Add middleware and routes to the app
 app.use(express.json());
 app.use('/users', usersRouter);
-
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
 
-app.use('/forget', forgetPasswordMail)
-app.use('/fb', fbRouter);
-app.use('/forget', forgetPasswordMail)
+//
 
 
 // app.use(userRoutes);
