@@ -39,6 +39,6 @@ userRouter.get("/", (req, res) => {
 });
 userRouter.get('/logout', function(req, res) {
         req.logout();
-        res.redirect('/');
+        res.redirect('/fb');
 });
 module.exports = userRouter;

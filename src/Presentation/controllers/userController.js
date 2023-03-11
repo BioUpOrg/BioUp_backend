@@ -45,19 +45,14 @@ const verifyAccountMail =  async (req, res) => {
 
 const sendActivateCodeSmS= async (req, res) => {
   try{
-    const activationcode =utils.getActivationCode(); 
-    const phone=req.params.phone;
-    const update= {activationCode:activationcode};
-    const user= await User.findOneAndUpdate({phone:phone},update,{new:true});
-    const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
-    const context_activation_via_sms='please use this code in bio up  website to activate your account ';
-    await getSmsToken(clientId,phone,activationcode,context_activation_via_sms);
+    console.log(req.params.phone);
+    const user =await userServ.sendActivationCodeBySms(req.params.phone);
+    console.log(user);
     res.status(200).send(user);
-    
-}
-catch(e){
-  res.status(500).send('error get token '+e);
-}
+  }
+  catch(e){ 
+    res.status(500).send('error updating activation code '+e);
+  }
 }
 
 
@@ -121,6 +116,12 @@ const addUser = async (req, res) => {
       ...req.body,
     });
     await user.save();
+    if(user.phone===""){
+      await userServ.activationMail(req.body.email);
+    }else{
+      await userServ.sendActivationCodeBySms(req.body.phone);
+    }
+  
     const token = await user.generateAuthToken();
     res
       .header('x-auth-token', token)

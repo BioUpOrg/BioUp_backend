@@ -30,11 +30,13 @@ passport.use(new facebookStrategy({
 function(token, refreshToken, profile, done) {
 
   // asynchronous
+
   process.nextTick(function() {
 
       // find the user in the database based on their facebook id
-      User.findOne({ 'uid' : profile.id }, function(err, user) {
 
+      const user =  User.findOne({ 'email' : profile.emails[0].value }).then((user,err) => {
+console.log("profile id "+profile.emails[0].value)
           // if there is an error, stop everything and return that
           // ie an error connecting to the database
           if (err)
@@ -52,7 +54,7 @@ function(token, refreshToken, profile, done) {
               // set all of the facebook information in our user model
               newUser.uid    = profile.id; // set the users facebook id                   
               newUser.token = token; // we will save the token that facebook provides to the user                    
-              newUser.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
+              newUser.firstName  = profile.name.givenName// look at the passport user profile to see how names are returned
               newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
               newUser.gender = profile.gender
               newUser.pic = profile.photos[0].value
@@ -68,7 +70,9 @@ function(token, refreshToken, profile, done) {
               });
           }
 
-      });
+      }
+      
+      );
 
   })
 
