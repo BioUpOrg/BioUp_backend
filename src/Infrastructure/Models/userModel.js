@@ -5,7 +5,7 @@ require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
-  email: { type: String },
+  email: { type: String ,default:''},
   password: { type: String, default: '' },
   phone:{ type: String,default:''},
   role: { type: String, default: 'user' },
