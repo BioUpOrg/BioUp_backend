@@ -193,7 +193,7 @@ app.use(passport.session());
 app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
-app.use('/google', googleRouter);
+app.use('/google', googleRouter);//google
 
 app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
