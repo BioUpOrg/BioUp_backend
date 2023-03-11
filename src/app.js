@@ -129,8 +129,14 @@ const express = require('express');
 // const UserModel = require('./Infrastructure/Models/UserModel');
 
 const app = express();
+const passport = require('passport');
+const cookieSession = require('cookie-session');
+require('./Presentation/middlwares/passport');
+
+
 var usersRouter = require('./Presentation/routes/users');
 var productsRouter = require('./Presentation/routes/products');
+
 var fbRouter = require('./Presentation/routes/fb');
 var googleRouter = require('./Presentation/routes/googleAuth');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
@@ -161,6 +167,8 @@ app.use(passport.initialize());
     app.use(cookieParser());
 
 const mongoose = require('mongoose');
+require('dotenv').config({ path: `${__dirname}/.env` });
+
 mongoose.connect(
   // `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_CLUSTER}/?retryWrites=true&w=majority`,
   'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
@@ -169,6 +177,13 @@ mongoose.connect(
     useNewUrlParser: true
   }
 );
+app.use(cookieSession({
+	name: 'google-auth-session',
+	keys: ['key1', 'key2']
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+	
 
 // Set up dependencies
 // const userRepository = new UserRepository({ userModel: UserModel });
@@ -181,7 +196,7 @@ app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
-app.use('/', googleRouter);
+
 app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
 

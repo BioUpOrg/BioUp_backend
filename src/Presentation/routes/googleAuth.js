@@ -4,7 +4,7 @@ const passport = require("passport");
  
 const googleRouter = express.Router();
 googleRouter.get('/', (req, res) => {
-	res.send("<button><a href='/google/auth'>Login With Google</a></button>")
+	res.send("<button><a href='google/auth'>Login With Google</a></button>")
 });
 
 // Auth
@@ -33,7 +33,7 @@ googleRouter.get('/auth/callback/failure' , (req , res) => {
 
 googleRouter.get('/logout', function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('/google');
 });
 
 module.exports = googleRouter;
