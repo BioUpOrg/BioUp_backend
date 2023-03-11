@@ -129,7 +129,6 @@ const express = require('express');
 // const UserModel = require('./Infrastructure/Models/UserModel');
 
 const app = express();
-const passport = require('passport');
 require('./Presentation/middlwares/passport');
 
 
