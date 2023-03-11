@@ -136,9 +136,36 @@ require('./Presentation/middlwares/passport');
 
 var usersRouter = require('./Presentation/routes/users');
 var productsRouter = require('./Presentation/routes/products');
-var googleRouter = require('./Presentation/routes/googleAuth');
 
+var fbRouter = require('./Presentation/routes/fb');
+var googleRouter = require('./Presentation/routes/googleAuth');
+var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
+var cookieSession = require('cookie-session');
+const  passport = require ("passport");
+const { json } = require( "body-parser");
+
+app.use(cookieSession({
+	name: 'google-auth-session',
+	keys: ['key1', 'key2']
+}));
+//
+app.use(passport.initialize());
+app.use(passport.session());
 // Set up database connection
+app.use(passport.initialize());
+app.use(json());
+app.set("view engine","ejs")
+const session = require('express-session')
+const cookieParser = require('cookie-parser')
+
+
+
+app.set("view engine","ejs")
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));
+app.use(passport.initialize());
+    app.use(passport.session()); 
+    app.use(cookieParser());
+
 const mongoose = require('mongoose');
 require('dotenv').config({ path: `${__dirname}/.env` });
 
@@ -147,10 +174,7 @@ mongoose.connect(
   'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
   console.log('connected to database !!!!'),
 {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
+    useNewUrlParser: true
   }
 );
 app.use(cookieSession({
@@ -173,9 +197,12 @@ app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
 
+app.use('/forget', forgetPasswordMail)
+app.use('/fb', fbRouter);
+
 //
-
-
+//
+//
 // app.use(userRoutes);
 
 // Start the server

@@ -5,15 +5,17 @@ require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: false },
+  email: { type: String },
+  password: { type: String, default: '' },
   phone:{ type: String,default:''},
+  role: { type: String, default: 'user' },
   createdAt: { type: Date, default: Date.now },
   lastLoginAt: { type: Date ,default:''},
   activationCode:{type :String,default:''},
-  isActivated: { type: Boolean, default: true },
+  //codeExpireDate:{type:String},
   statusActivation:{type:Boolean,default:false},
-  role: { type: String, default: 'user' },
+  codeRecuperation: {type:String, default:''},
+  isActivated: { type: Boolean, default: true },
 
   tokens: [
     {
@@ -89,7 +91,6 @@ userSchema.pre('save', function preSave(next) {
     throw e;
   }
 });
-
 const userModel = mongoose.model('User', userSchema);
 
 module.exports = userModel;
