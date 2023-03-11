@@ -14,6 +14,12 @@ const userSchema = new mongoose.Schema({
   isActivated: { type: Boolean, default: true },
   statusActivation:{type:Boolean,default:false},
   role: { type: String, default: 'user' },
+  uid: {type: String},
+  gender: {type : String} ,
+  pic:{type : String} ,
+  token:{type : String} ,
+
+
 
   tokens: [
     {
