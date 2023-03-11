@@ -142,7 +142,6 @@ var cookieSession = require('cookie-session');//
 const  passport = require ("passport");
 
 const { json } = require( "body-parser");
-const  passport = require ("passport");
 app.use(passport.initialize());
 app.use(json());
 app.set("view engine","ejs")
@@ -189,6 +188,7 @@ app.use('/users', usersRouter);
 
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
+
 
 app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
