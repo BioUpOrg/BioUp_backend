@@ -133,23 +133,13 @@ require('./Presentation/middlwares/passport');
 
 
 var usersRouter = require('./Presentation/routes/users');
+
 var productsRouter = require('./Presentation/routes/products');
 
 var fbRouter = require('./Presentation/routes/fb');
-var googleRouter = require('./Presentation/routes/googleAuth');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
-var cookieSession = require('cookie-session');
-const  passport = require ("passport");
 const { json } = require( "body-parser");
-
-app.use(cookieSession({
-	name: 'google-auth-session',
-	keys: ['key1', 'key2']
-}));
-//
-app.use(passport.initialize());
-app.use(passport.session());
-// Set up database connection
+const  passport = require ("passport");
 app.use(passport.initialize());
 app.use(json());
 app.set("view engine","ejs")
@@ -164,6 +154,7 @@ app.use(passport.initialize());
     app.use(passport.session()); 
     app.use(cookieParser());
 
+// Set up database connection
 const mongoose = require('mongoose');
 require('dotenv').config({ path: `${__dirname}/.env` });
 
@@ -192,15 +183,15 @@ app.use(passport.session());
 // Add middleware and routes to the app
 app.use(express.json());
 app.use('/users', usersRouter);
+
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
 
 app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
+app.use('/forget', forgetPasswordMail)
 
-//
-//
-//
+
 // app.use(userRoutes);
 
 // Start the server
