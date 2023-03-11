@@ -133,8 +133,6 @@ var usersRouter = require('./Presentation/routes/users');
 var productsRouter = require('./Presentation/routes/products');
 var googleRouter = require('./Presentation/routes/googleAuth');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
-var passport = require('passport');
-var cookieSession = require('cookie-session');//
 
 app.use(cookieSession({
 	name: 'google-auth-session',
