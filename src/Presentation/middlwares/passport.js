@@ -44,6 +44,7 @@ function(request, accessToken, refreshToken, profile, done) {
                 if (err){
                     console.log("error")
                     throw err;
+                    car
                 }
                 console.log("user saved")
                 // if successful, return the new user
