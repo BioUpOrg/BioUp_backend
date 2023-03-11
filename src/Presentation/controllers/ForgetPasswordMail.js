@@ -14,14 +14,14 @@ const transporter = nodemailer.createTransport({
   //
   //
   // Generate a random verification code
-  const verificationCode = crypto.randomBytes(3).toString('hex'); // 3 bytes will generate a 6-digit hex code
+  const activationCode = crypto.randomBytes(3).toString('hex'); // 3 bytes will generate a 6-digit hex code
   
   // Define the email content
   const mailOptions = {
     from: 'habibfiras.hadroug@esprit.tn',
     to: 'habibfiras.hadroug@esprit.tn',
     subject: 'Password reset verification code',
-    text: `Your password reset verification code is: ${verificationCode}`
+    text: `Your password reset verification code is: ${activationCode}`
   };
   
   // Send the email
@@ -33,7 +33,7 @@ try{
       console.log(error);
     } else {
       console.log('Email sent: ' + info.response);
-      const update ={verficationCode:verificationCode}
+      const update ={activationCode:activationCode}
       const user=User.findOneAndUpdate({email:req.body.email},update,{new : true}
         
         
@@ -65,9 +65,9 @@ const verifps= async (req, res,next) => {
     if (err) {
       console.log(err);
     } else {
-       if(user.verficationCode==req.body.verficationCode){
+       if(user.activationCode==req.body.activationCode){
     res.json({message:'code correct'})
-    user.verficationCode = "1";
+    user.activationCode = "1";
     user.save();
     // Set the user object on the request object for later use
     req.user = user;
@@ -87,9 +87,9 @@ const changeps= async (req, res) => {
   try{
     const user = await User.findOne({email:req.body.email}).then((user,err) => {
       if(user){
-        if(user.verficationCode === "1"){
+        if(user.activationCode === "1"){
           user.password=req.body.password;
-          user.verficationCode = "";
+          user.activationCode = "";
           user.save()
           res.json({message:'changed'})
 
