@@ -46,6 +46,19 @@ const verifyActivationCodeMail = async (token)=>{
     }
 }
 
+ const sendActivationCodeBySms = async(phone)=>{
+  
+  const activationcode =utils.getActivationCode(); 
+  const update= {activationCode:activationcode};
+  const user= await User.findOneAndUpdate({phone:phone},update,{new:true});
+  const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
+  const context_activation_via_sms='please use this code in bio up  website to activate your account ';
+  await getSmsToken(clientId,phone,activationcode,context_activation_via_sms);
+  return user;
+
+ }
+
+
  const sendCodeRecPassSms = async (phone) =>{
  const number =phone;
  console.log(number);
@@ -104,6 +117,6 @@ const update={codeRecuperation:coderecp};
 
 module.exports = {
   addUser,activationMail,verifyActivationCodeMail,
-  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass
+  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms
 };
 
