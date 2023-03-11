@@ -13,6 +13,12 @@ const addUser = async (user) => {
   }
 };
 
+const userLogin= async (user) => {
+  const searchedUser = await User.findByCredentials(user.email,user.password);
+  const token = await searchedUser.generateAuthToken();
+  return token ;
+}
+
 const activationMail = async (mail)=>{
   console.log(mail);
   const activationCode =utils.getActivationCode(); 
@@ -116,7 +122,8 @@ const update={codeRecuperation:coderecp};
 
 
 module.exports = {
-  addUser,activationMail,verifyActivationCodeMail,
+
+  addUser,userLogin,activationMail,verifyActivationCodeMail,
   sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms
 };
 

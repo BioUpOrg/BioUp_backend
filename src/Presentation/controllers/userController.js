@@ -4,6 +4,20 @@ const utils=require('../../Presentation/utils/verifaccountutils');
 const getSmsToken=require('../../Presentation/middlwares/getSmsToken');
 const userServ =require('../../Application/UseCases/user/userService');
 
+const login = async (req, res) => {
+  try {
+    const user = req.body;
+    const token = await userService.userLogin(user);
+    res
+      .header('x-auth-token', token)
+      .header('access-control-expose-headers', 'x-auth-token')
+      .status(200)
+      .send({ token });
+  } catch (e) {
+    res.status(e.code || 400).send({ error: e.message });
+  }
+};
+
  const sendActivateCodeMail = async (req, res) => {
   try{
     console.log(req.params.mail);
@@ -149,6 +163,7 @@ const DesactivateUserAccount = async (req, res) => {
 
 
 module.exports = {
+  login,
   sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
 sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser
 };
