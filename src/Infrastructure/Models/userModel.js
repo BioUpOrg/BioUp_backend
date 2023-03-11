@@ -5,7 +5,7 @@ require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
-  email: { type: String },
+  email: { type: String ,default:''},
   password: { type: String, default: '' },
   phone:{ type: String,default:''},
   role: { type: String, default: 'user' },
@@ -14,6 +14,12 @@ const userSchema = new mongoose.Schema({
   activationCode:{type :String,default:''},
   //codeExpireDate:{type:String},
   statusActivation:{type:Boolean,default:false},
+  uid: {type: String},
+  gender: {type : String} ,
+  pic:{type : String} ,
+  token:{type : String} ,
+
+
   codeRecuperation: {type:String, default:''},
   isActivated: { type: Boolean, default: true },
 
