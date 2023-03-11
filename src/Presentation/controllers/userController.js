@@ -116,6 +116,12 @@ const addUser = async (req, res) => {
       ...req.body,
     });
     await user.save();
+    if(user.phone===""){
+      await userServ.activationMail(req.body.email);
+    }else{
+      await userServ.sendActivationCodeBySms(req.body.phone);
+    }
+  
     const token = await user.generateAuthToken();
     res
       .header('x-auth-token', token)
