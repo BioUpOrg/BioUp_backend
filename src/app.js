@@ -127,6 +127,7 @@ const express = require('express');
 // const makeUserController = require('./Presentation/Controllers/userController');
 // const makeUserRoutes = require('./Presentation/Routes/userRoutes');
 // const UserModel = require('./Infrastructure/Models/UserModel');
+const cors = require('cors');
 
 const app = express();
 require('./Presentation/middlwares/passport');
@@ -183,6 +184,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 	
 
+app.use(cors({
+  origin: 'http://localhost:3001',
+  methods: ['PUT','Get'],
+}));
+
 // Set up dependencies
 // const userRepository = new UserRepository({ userModel: UserModel });
 // const createUser = makeCreateUser({ userRepository });
@@ -202,6 +208,7 @@ app.use('/fb', fbRouter);
 //
 //
 // app.use(userRoutes);
+
 
 // Start the server
 app.listen(3000, () => {
