@@ -158,7 +158,7 @@ try{
 const DesactivateUserAccount = async (req, res) => {
   const user = await User.findById(req.params._id);
   try {
-    user.isActivated = false;
+    user.isBlocked = false;
     await user.save();
     res.status(200).send({ message: 'Action completed successfully!' });
   } catch (e) {
