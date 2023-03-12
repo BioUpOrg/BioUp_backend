@@ -57,17 +57,16 @@ const sendActivateCodeSmS= async (req, res) => {
 
 
 const verifyAccountSms = async (req, res) => {
-  const smscode = req.params.smscode;
-  if (smscode) {
+  try{
+    const smscode = req.params.smscode;
     const user = await User.findOne({activationCode:smscode}); 
-    if (user) {
       user.statusActivation = true;
       await user.save();
-      res.status(200).send(user);
-    }else{
-      res.status(403).send({err: 'activation code invalid'});
-    }
+      res.send('activation avec succées')
+  }catch(e){
+    res.send('code invalid');
   }
+ 
    
 }
 const sendCodeRecBySms =async (req,res)=>{
@@ -142,7 +141,15 @@ const getUserById = async (req, res) => {
     res.status(500).send({ error: e });
   }
 }
-
+const verifyIfPhoneExist = async (req, res)=>{
+  try{
+    console.log(req.params.phone)
+    const user = await userServ.verifyIfPhoneExistence(req.params.phone);
+    res.status(200).send(user);
+  }catch(e){
+    res.send("error");
+  }
+ }
 
 const getUsersList= async(req,res)=>{
 try{
@@ -168,8 +175,9 @@ const DesactivateUserAccount = async (req, res) => {
 
 
 
+
 module.exports = {
   login,
   sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
-sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser
+sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist
 };
