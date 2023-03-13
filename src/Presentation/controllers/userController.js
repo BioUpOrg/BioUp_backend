@@ -106,10 +106,21 @@ const changePass =async (req,res)=>{
 //Create New User
 const addUser = async (req, res) => {
   try {
-    const userIsExist = (await User.exists({ email: req.body.email })) || null;
-    if (userIsExist) {
-      return res.status(409).send({ error: 'User is already registered' });
+    if(req.body.email!==""){
+      const userIsExist = (await User.exists({ email: req.body.email })) || null;
+      if (userIsExist) {
+        console.log("Email Alerady Exists ")
+        return res.status(409).send({ error: 'User Email is already registered'  , field: 'email'});
+      }
     }
+    if(req.body.phone!==""){
+    const userIsExist = (await User.exists({ phone: req.body.phone })) || null;
+    if (userIsExist) {
+      console.log("Phone Alerady Exists ")
+      return res.status(409).send({ error: 'User Phone is already registered', field: 'phone'  });
+    }
+  }
+
 
     const user = new User({
       ...req.body,
