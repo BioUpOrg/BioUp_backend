@@ -119,27 +119,49 @@
 
 
 
-// last update 
+// last update //
 const express = require('express');
+
 // const connect = require('./Infrastructure/Database/mongodb');
 // const makeCreateUser = require('./Application/UseCases/user/createUser');
 // const UserRepository = require('./Domain/IRepositories/UserRepository');
 // const makeUserController = require('./Presentation/Controllers/userController');
 // const makeUserRoutes = require('./Presentation/Routes/userRoutes');
 // const UserModel = require('./Infrastructure/Models/UserModel');
+const cors = require('cors');
 
 const app = express();
+const passport = require('passport');
+
+var cookieSession = require('cookie-session');//
 require('./Presentation/middlwares/passport');
 
 
 var usersRouter = require('./Presentation/routes/users');
-
 var productsRouter = require('./Presentation/routes/products');
-
+var googleRouter = require('./Presentation/routes/googleAuth');
 var fbRouter = require('./Presentation/routes/fb');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
+
 const { json } = require( "body-parser");
-const  passport = require ("passport");
+
+
+const mongoose = require('mongoose');
+require('dotenv').config({ path: `${__dirname}/.env` });
+
+mongoose.connect(
+  'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
+  console.log('connected to database !!!!'),
+{
+    useNewUrlParser: true
+  }
+);
+app.use(cookieSession({
+	name: 'google-auth-session',
+	keys: ['key1', 'key2']
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(passport.initialize());
 app.use(json());
 app.set("view engine","ejs")
@@ -154,25 +176,13 @@ app.use(passport.initialize());
     app.use(passport.session()); 
     app.use(cookieParser());
 
-// Set up database connection
-const mongoose = require('mongoose');
-require('dotenv').config({ path: `${__dirname}/.env` });
+app.use(express.json());
 
-mongoose.connect(
-  // `mongodb+srv://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_CLUSTER}/?retryWrites=true&w=majority`,
-  'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
-  console.log('connected to database !!!!'),
-{
-    useNewUrlParser: true
-  }
-);
-app.use(cookieSession({
-	name: 'google-auth-session',
-	keys: ['key1', 'key2']
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['PUT','Get'],
 }));
-app.use(passport.initialize());
-app.use(passport.session());
-	
 
 // Set up dependencies
 // const userRepository = new UserRepository({ userModel: UserModel });
@@ -180,21 +190,19 @@ app.use(passport.session());
 // const userController = makeUserController({ createUser });
 // const userRoutes = makeUserRoutes({ userController });
 
-// Add middleware and routes to the app
-app.use(express.json());
-app.use('/users', usersRouter);
 
+app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
-
 app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
 app.use('/forget', forgetPasswordMail)
 
 
-// app.use(userRoutes);
+
 
 // Start the server
+
 app.listen(3000, () => {
-  console.log('Server is listening on port 3000');
+  console.log('Server is listening on port 4000');
 });
