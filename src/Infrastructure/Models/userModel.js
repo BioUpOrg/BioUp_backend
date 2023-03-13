@@ -4,22 +4,24 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: false },
+  firstName: { type: String },
+  email: { type: String ,default:''},
+  password: { type: String, default: '' },
   phone:{ type: String,default:''},
+  role: { type: String, default: 'user' },
   createdAt: { type: Date, default: Date.now },
   lastLoginAt: { type: Date ,default:''},
   activationCode:{type :String,default:''},
-  isActivated: { type: Boolean, default: true },
+  //codeExpireDate:{type:String},
   statusActivation:{type:Boolean,default:false},
-  role: { type: String, default: 'user' },
   uid: {type: String},
   gender: {type : String} ,
   pic:{type : String} ,
   token:{type : String} ,
 
 
+  codeRecuperation: {type:String, default:''},
+  isActivated: { type: Boolean, default: true },
 
   tokens: [
     {
@@ -48,6 +50,7 @@ userSchema.methods.generateAuthToken = async function generateAuthToken() {
   return token;
 };
 
+
 userSchema.statics.findByCredentials = async function findByCredentials(
   email,
   password
@@ -68,6 +71,20 @@ userSchema.statics.findByCredentials = async function findByCredentials(
     error.code = 401;
     throw error;
   }
+  return user;
+};
+userSchema.statics.findByCredentialsfb = async function findByCredentialsfb(
+  email
+) {
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    const error = new Error(
+      'Impossible de se connecter , utilisateur non enregistré'
+    );
+    error.code = 404;
+    throw error;
+  }
+  
   return user;
 };
 
@@ -95,7 +112,6 @@ userSchema.pre('save', function preSave(next) {
     throw e;
   }
 });
-
 const userModel = mongoose.model('User', userSchema);
 
 module.exports = userModel;
