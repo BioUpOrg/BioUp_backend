@@ -195,11 +195,23 @@ const addUser = async (req, res) => {
   }
 };
 
+
 const getConnectedUser = async (req, res) => {
   try {
     res
       .status(200)
-      .send({ email: req.user.email, firstName: req.user.firstName , lastName: req.user.lastName , role: req.user.role , pic: req.user.pic , phone: req.user.phone });
+      .send({ email: req.user.email,
+         firstName: req.user.firstName ,
+         lastName: req.user.lastName ,
+          role: req.user.role ,
+          pic: req.user.pic ,
+           phone: req.user.phone,
+           password:req.user.password,
+           createdAt:req.user.createdAt,
+           lastLoginAt:req.user.createdAt,
+           statusActivation:req.user.statusActivation,
+           gender:req.user.gender,
+           });
   } catch (e) {
     res.status(500).send();
   }
