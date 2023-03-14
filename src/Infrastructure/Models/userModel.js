@@ -4,8 +4,10 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  email: { type: String },
+
+  firstName: { type: String, default:''},
+  lastName: { type: String, default:''},
+  email: { type: String ,default:''},
   password: { type: String, default: '' },
   phone:{ type: String,default:''},
   role: { type: String, default: 'user' },
@@ -15,7 +17,13 @@ const userSchema = new mongoose.Schema({
   //codeExpireDate:{type:String},
   statusActivation:{type:Boolean,default:false},
   codeRecuperation: {type:String, default:''},
-  isActivated: { type: Boolean, default: true },
+  isBlocked: { type: Boolean, default: false },
+  uid: {type: String},
+  gender: {type : String} ,
+  pic:{type : String} ,
+  token:{type : String} ,
+
+
 
   tokens: [
     {
@@ -44,6 +52,7 @@ userSchema.methods.generateAuthToken = async function generateAuthToken() {
   return token;
 };
 
+
 userSchema.statics.findByCredentials = async function findByCredentials(
   email,
   password
@@ -66,11 +75,26 @@ userSchema.statics.findByCredentials = async function findByCredentials(
   }
   return user;
 };
+userSchema.statics.findByCredentialsfb = async function findByCredentialsfb(
+  email
+) {
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    const error = new Error(
+      'Impossible de se connecter , utilisateur non enregistré'
+    );
+    error.code = 404;
+    throw error;
+  }
+  
+  return user;
+};
 
 // Hash the plain text password before saving
 userSchema.pre('save', function preSave(next) {
   try {
     const user = this;
+    console.log("user before hash",user);
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
 

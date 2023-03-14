@@ -1,7 +1,10 @@
 const express = require('express');
 const passport = require("passport");
 const userController = require( "../controllers/facebookConnect");
-
+const userService = require("../../Application/UseCases/user/userService");
+const bcrypt = require("bcrypt");
+//const User = require("../../Infrastructure/Models/userModel");
+var a ="";
  
 const userRouter = express.Router();
 
@@ -22,13 +25,26 @@ function isLoggedIn(req, res, next) {
 
   // if they aren't redirect them to the home page
   res.redirect('/');
+
 }
-userRouter.get('/profile', isLoggedIn, function(req, res) {
-  console.log(req.user)
-  res.render('profile', {
-      user : req.user // get the user out of session and pass to template
-  });
+
+userRouter.get('/profile', isLoggedIn, async function(req, res) {
+
+
+  const user  =({"email": req.user.email});
+ 
+  console.log("this user ",user);
+ const token = await userService.userLoginfb(user);
+  res.send(token);
+  a=token;
+  
+  console.log("this token ",token);
+
 });
+userRouter.get('/test',(req,res)=>{
+  res.send( a);
+}
+)
 
 userRouter.get("/fail", (req, res) => {
   res.send("Failed attempt");
@@ -39,6 +55,6 @@ userRouter.get("/", (req, res) => {
 });
 userRouter.get('/logout', function(req, res) {
         req.logout();
-        res.redirect('/');
+        res.redirect('/fb');
 });
 module.exports = userRouter;
