@@ -75,7 +75,7 @@ userSchema.statics.findByCredentials = async function findByCredentials(
     error.code = 404;
     throw error;
   }
-  if(!user.isActivated){
+  if(!user.statusActivation){
     const error = new Error(
       'NOT_ACTIVATED'
     );
