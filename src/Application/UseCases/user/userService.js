@@ -53,7 +53,6 @@ const verifyActivationCodeMail = async (token)=>{
       return user ;
     } else {
       res.status(403).send({err: 'activation code invalid'});
-      
     }
 }
 
@@ -122,13 +121,22 @@ const update={codeRecuperation:coderecp};
     
   }
 
-
+  const verifyIfPhoneExistence =  async (phone)=>{
+    const user = await User.findOne({phone:phone});
+    if(user){
+      return "exist";
+    }
+    else{
+      return "not exist";
+    }
+  }
 
 
 
 module.exports = {
 
   addUser,userLogin,activationMail,verifyActivationCodeMail,
-  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,userLoginfb
+  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,userLoginfb,verifyIfPhoneExistence
+
 };
 
