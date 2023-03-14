@@ -24,9 +24,7 @@ var googleRouter = require('./Presentation/routes/googleAuth');
 var fbRouter = require('./Presentation/routes/fb');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 
-const cors = require('cors');
 var cookieSession = require('cookie-session');
-const  passport = require ("passport");
 const { json } = require( "body-parser");
 
 app.use(cors({
@@ -37,7 +35,6 @@ app.use(cors({
 
 
 
-const mongoose = require('mongoose');
 require('dotenv').config({ path: `${__dirname}/.env` });
 
 
