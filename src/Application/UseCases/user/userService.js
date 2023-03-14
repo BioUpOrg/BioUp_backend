@@ -18,6 +18,11 @@ const userLogin= async (user) => {
   const token = await searchedUser.generateAuthToken();
   return token ;
 }
+const userLoginfb= async (user) => {
+  const searchedUser = await User.findByCredentialsfb(user.email);
+  const token = await searchedUser.generateAuthToken();
+  return token ;
+}
 
 const activationMail = async (mail)=>{
   console.log(mail);
@@ -27,7 +32,7 @@ const activationMail = async (mail)=>{
    const update= {activationCode:activationCode};
    const user= await User.findOneAndUpdate({email:mail},update,{new:true});
    const token=utils.generateActivationtoken(mail,activationCode);
-   const URL_ACTIVE_ACCOUNT='http://localhost:3000/users/check/activate/account/'+token;
+   const URL_ACTIVE_ACCOUNT='http://localhost:4000/users/check/activate/account/'+token;
    await sendEmail(mail,URL_ACTIVE_ACCOUNT);
    return user;
 }
@@ -48,9 +53,21 @@ const verifyActivationCodeMail = async (token)=>{
       return user ;
     } else {
       res.status(403).send({err: 'activation code invalid'});
-      
     }
 }
+
+ const sendActivationCodeBySms = async(phone)=>{
+  
+  const activationcode =utils.getActivationCode(); 
+  const update= {activationCode:activationcode};
+  const user= await User.findOneAndUpdate({phone:phone},update,{new:true});
+  const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
+  const context_activation_via_sms='please use this code in bio up  website to activate your account ';
+  await getSmsToken(clientId,phone,activationcode,context_activation_via_sms);
+  return user;
+
+ }
+
 
  const sendCodeRecPassSms = async (phone) =>{
  const number =phone;
@@ -60,14 +77,19 @@ const update={codeRecuperation:coderecp};
  const user = await User.findOneAndUpdate({phone:number},update,{new:true});
     const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
     const context_activation_via_sms='please use this code in bio up  website to Create a new Password  ';
-      await getSmsToken(clientId,number,coderecp,context_activation_via_sms);
-      await user.save();
+       getSmsToken(clientId,number,coderecp,context_activation_via_sms);
+       user.save();
+      console.log(user)
       return user ;
+      
 
  }
 
  const verifyCodeRecPassSms = async (phone, code) => {
   const user = await User.findOne({ phone });
+  console.log("uu",phone)
+  console.log("hjboj",code)
+
   if (!user) {
     throw new Error('User not found');
   }
@@ -80,6 +102,10 @@ const update={codeRecuperation:coderecp};
   }
   return user;
 };
+
+
+
+
    const changedPass=async (number,password)=>{
     console.log(number);
     console.log(password);
@@ -104,12 +130,21 @@ const update={codeRecuperation:coderecp};
     
   }
 
-
+  const verifyIfPhoneExistence =  async (phone)=>{
+    const user = await User.findOne({phone:phone});
+    if(user){
+      return "exist";
+    }
+    else{
+      return "not exist";
+    }
+  }
 
 
 
 module.exports = {
-  addUser,userLogin,activationMail,verifyActivationCodeMail,
-  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass
-};
 
+  addUser,userLogin,activationMail,verifyActivationCodeMail,
+  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,userLoginfb,verifyIfPhoneExistence
+
+};
