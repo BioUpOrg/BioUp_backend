@@ -132,7 +132,7 @@ const cors = require('cors');
 
 const app = express();
 const passport = require('passport');
-
+const cors = require('cors');
 var cookieSession = require('cookie-session');//
 require('./Presentation/middlwares/passport');
 
@@ -178,6 +178,10 @@ app.use(passport.initialize());
 
 app.use(express.json());
 
+app.use(cors({
+  origin: 'http://localhost:3001',
+  methods: ['PUT','GET'],
+}));
 
 app.use(cors({
   origin: 'http://localhost:3000',
