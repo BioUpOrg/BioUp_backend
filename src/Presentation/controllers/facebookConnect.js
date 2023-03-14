@@ -35,8 +35,8 @@ function(token, refreshToken, profile, done) {
 
       // find the user in the database based on their facebook id
 
-      const user =  User.findOne({ 'email' : profile.emails[0].value }).then((user,err) => {
-console.log("profile id "+profile.emails[0].value)
+      User.findOne({ 'uid' : profile.id }, function(err, user) {
+        console.log("profile id "+profile.emails[0].value)
           // if there is an error, stop everything and return that
           // ie an error connecting to the database
           if (err)
@@ -57,7 +57,7 @@ console.log("profile id "+profile.emails[0].value)
               newUser.firstName  = profile.name.givenName// look at the passport user profile to see how names are returned
               newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
               newUser.gender = profile.gender
-              newUser.pic = profile.photos[0].value
+           //   newUser.pic = profile.photos[0].value
               // save our user to the database
               newUser.save(function(err) {
                   if (err){
