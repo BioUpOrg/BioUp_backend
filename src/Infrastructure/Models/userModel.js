@@ -4,7 +4,9 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String },
+
+  firstName: { type: String, default:''},
+  lastName: { type: String, default:''},
   email: { type: String ,default:''},
   password: { type: String, default: '' },
   phone:{ type: String,default:''},
@@ -21,7 +23,7 @@ const userSchema = new mongoose.Schema({
 
 
   codeRecuperation: {type:String, default:''},
-  isActivated: { type: Boolean, default: true },
+  isBlocked: { type: Boolean, default: true },
 
   tokens: [
     {

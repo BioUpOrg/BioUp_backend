@@ -122,6 +122,14 @@
 // last update //
 const express = require('express');
 
+// const connect = require('./Infrastructure/Database/mongodb');
+// const makeCreateUser = require('./Application/UseCases/user/createUser');
+// const UserRepository = require('./Domain/IRepositories/UserRepository');
+// const makeUserController = require('./Presentation/Controllers/userController');
+// const makeUserRoutes = require('./Presentation/Routes/userRoutes');
+// const UserModel = require('./Infrastructure/Models/UserModel');
+const cors = require('cors');
+
 const app = express();
 const passport = require('passport');
 const cors = require('cors');
@@ -175,6 +183,18 @@ app.use(cors({
   methods: ['PUT','GET'],
 }));
 
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['PUT','Get'],
+}));
+
+// Set up dependencies
+// const userRepository = new UserRepository({ userModel: UserModel });
+// const createUser = makeCreateUser({ userRepository });
+// const userController = makeUserController({ createUser });
+// const userRoutes = makeUserRoutes({ userController });
+
+
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
@@ -183,6 +203,10 @@ app.use('/fb', fbRouter);
 app.use('/forget', forgetPasswordMail)
 
 
-app.listen(3000, () => {
-  console.log('Server is listening on port 3000');
+
+
+// Start the server
+
+app.listen(4000, () => {
+  console.log('Server is listening on port 4000');
 });
