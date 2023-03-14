@@ -35,11 +35,13 @@ userRouter.get('/profile', isLoggedIn, async function(req, res) {
  
   console.log("this user ",user);
  const token = await userService.userLoginfb(user);
-  res.send(token);
+ // res.send(token);
   a=token;
   
   console.log("this token ",token);
-
+  res.render('profile', {
+    user : req.user // get the user out of session and pass to template
+});
 });
 userRouter.get('/test',(req,res)=>{
   res.send( a);
