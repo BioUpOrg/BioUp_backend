@@ -4,7 +4,10 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String },
+
+
+  firstName: { type: String, default:''},
+  lastName: { type: String, default:''},
   email: { type: String ,default:''},
   password: { type: String, default: '' },
   phone:{ type: String,default:''},
@@ -21,7 +24,7 @@ const userSchema = new mongoose.Schema({
 
 
   codeRecuperation: {type:String, default:''},
-  isActivated: { type: Boolean, default: true },
+  isBlocked: { type: Boolean, default: true },
 
   tokens: [
     {
@@ -92,6 +95,7 @@ userSchema.statics.findByCredentialsfb = async function findByCredentialsfb(
 userSchema.pre('save', function preSave(next) {
   try {
     const user = this;
+    console.log("user before hash",user);
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
 

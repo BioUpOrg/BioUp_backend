@@ -40,7 +40,7 @@ function sendEmail(email,url){
         console.log('OTP sent to  email');
     }
     ).catch(()=>{
-        console.log('Error sending OTP to  email');
+        console.log('Error sending OTP to email');
     })
     
      

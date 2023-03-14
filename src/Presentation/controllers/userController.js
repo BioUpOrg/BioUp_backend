@@ -57,17 +57,16 @@ const sendActivateCodeSmS= async (req, res) => {
 
 
 const verifyAccountSms = async (req, res) => {
-  const smscode = req.params.smscode;
-  if (smscode) {
+  try{
+    const smscode = req.params.smscode;
     const user = await User.findOne({activationCode:smscode}); 
-    if (user) {
       user.statusActivation = true;
       await user.save();
-      res.status(200).send(user);
-    }else{
-      res.status(403).send({err: 'activation code invalid'});
-    }
+      res.send('activation avec succées')
+  }catch(e){
+    res.send('code invalid');
   }
+ 
    
 }
 const sendCodeRecBySms =async (req,res)=>{
@@ -107,10 +106,21 @@ const changePass =async (req,res)=>{
 //Create New User
 const addUser = async (req, res) => {
   try {
-    const userIsExist = (await User.exists({ email: req.body.email })) || null;
-    if (userIsExist) {
-      return res.status(409).send({ error: 'User is already registered' });
+    if(req.body.email!==""){
+      const userIsExist = (await User.exists({ email: req.body.email })) || null;
+      if (userIsExist) {
+        console.log("Email Alerady Exists ")
+        return res.status(409).send({ error: 'User Email is already registered'  , field: 'email'});
+      }
     }
+    if(req.body.phone!==""){
+    const userIsExist = (await User.exists({ phone: req.body.phone })) || null;
+    if (userIsExist) {
+      console.log("Phone Alerady Exists ")
+      return res.status(409).send({ error: 'User Phone is already registered', field: 'phone'  });
+    }
+  }
+
 
     const user = new User({
       ...req.body,
@@ -134,6 +144,22 @@ const addUser = async (req, res) => {
   }
 };
 
+
+
+
+const getConnectedUser = async (req, res) => {
+  try {
+    res
+      .status(200)
+      .send({ email: req.user.email, firstName: req.user.firstName });
+  } catch (e) {
+    res.status(500).send();
+  }
+}
+
+
+
+
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params._id);
@@ -142,7 +168,15 @@ const getUserById = async (req, res) => {
     res.status(500).send({ error: e });
   }
 }
-
+const verifyIfPhoneExist = async (req, res)=>{
+  try{
+    console.log(req.params.phone)
+    const user = await userServ.verifyIfPhoneExistence(req.params.phone);
+    res.status(200).send(user);
+  }catch(e){
+    res.send("error");
+  }
+ }
 
 const getUsersList= async(req,res)=>{
 try{
@@ -158,7 +192,7 @@ try{
 const DesactivateUserAccount = async (req, res) => {
   const user = await User.findById(req.params._id);
   try {
-    user.isActivated = false;
+    user.isBlocked = false;
     await user.save();
     res.status(200).send({ message: 'Action completed successfully!' });
   } catch (e) {
@@ -168,8 +202,9 @@ const DesactivateUserAccount = async (req, res) => {
 
 
 
+
 module.exports = {
   login,
-  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
-sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser
+  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,getConnectedUser,
+sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist
 };
