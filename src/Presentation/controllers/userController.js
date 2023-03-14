@@ -34,11 +34,11 @@ const verifyAccountMail =  async (req, res) => {
   try{
     const user =await userServ.verifyActivationCodeMail(req.params.token); 
     console.log(user);
-    res.status(200).send(user);
+    res.send('verified');
 
     //
   }catch(e){
-    res.status(500).send('link expire '+e);
+    res.send('unverified');
   }
  
 }
@@ -62,30 +62,32 @@ const verifyAccountSms = async (req, res) => {
     const user = await User.findOne({activationCode:smscode}); 
       user.statusActivation = true;
       await user.save();
-      res.send('activation avec succées')
+      console.log(user);
+      res.send('activation avec succées');
   }catch(e){
     res.send('code invalid');
   }
- 
-   
+  
 }
 const sendCodeRecBySms =async (req,res)=>{
   try{
     const user = await userServ.sendCodeRecPassSms(req.params.phone);
     console.log(user);
-    res.status(200).send(user);
+    res.send('sent')
   }catch(e){
-    res.status(500).send('error get token '+e);
+    res.send('error');
   }
 }
 
 const verifyCodeRecBySms = async (req, res) => {
-  const { phone, code } = req.body;
+ console.log(req.query)
   try {
-    const user = await userServ.verifyCodeRecPassSms(phone, code);
-    res.status(200).send(user);
+    const user = await userServ.verifyCodeRecPassSms(req.query.phone, req.query.code);
+    console.log(user);
+    res.send('succes');
   } catch (e) {
-    res.status(400).send({ error: e.message });
+    console.log(e)
+   res.send('error');
   }
 };
 
@@ -93,9 +95,9 @@ const changePass =async (req,res)=>{
   const {phone,password}=req.body;
   try {
     const user = await userServ.changedPass(phone,password);
-    res.status(200).send(user);
+    res.send('succes');
   } catch (e) {
-    res.status(400).send({ error: e.message });
+    res.send('error');
   }
 }
 

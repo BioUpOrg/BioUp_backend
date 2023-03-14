@@ -72,14 +72,19 @@ const update={codeRecuperation:coderecp};
  const user = await User.findOneAndUpdate({phone:number},update,{new:true});
     const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6cnVKcmFYUWRsM0loZkVmdg==';
     const context_activation_via_sms='please use this code in bio up  website to Create a new Password  ';
-      await getSmsToken(clientId,number,coderecp,context_activation_via_sms);
-      await user.save();
+       getSmsToken(clientId,number,coderecp,context_activation_via_sms);
+       user.save();
+      console.log(user)
       return user ;
+      
 
  }
 
  const verifyCodeRecPassSms = async (phone, code) => {
   const user = await User.findOne({ phone });
+  console.log("uu",phone)
+  console.log("hjboj",code)
+
   if (!user) {
     throw new Error('User not found');
   }
@@ -92,6 +97,10 @@ const update={codeRecuperation:coderecp};
   }
   return user;
 };
+
+
+
+
    const changedPass=async (number,password)=>{
     console.log(number);
     console.log(password);
