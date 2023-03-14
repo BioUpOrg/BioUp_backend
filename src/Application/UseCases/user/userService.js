@@ -5,6 +5,27 @@ const User =require('../../../Infrastructure/Models/userModel');
 const { sendActivateCodeSmS } = require('../../../Presentation/controllers/userController');
 const getSmsToken = require('../../../Presentation/middlwares/getSmsToken');
 
+const isUserExistByPhone =async (phone) =>{
+  try {
+    const user = await User.findOne({ phone });
+    const exist = user ? true : false;
+    return exist;
+  } catch (error) {
+    console.log(error);
+  }
+} 
+
+const isUserExistByEmail =async (email) =>{
+  try {
+    const user = await User.findOne({ email });
+    const exist = user ? true : false;
+    return exist;
+  } catch (error) {
+    console.log(error);
+  }
+} 
+
+
 const addUser = async (user) => {
   try {
     return await userRepository.create(user);
@@ -15,7 +36,7 @@ const addUser = async (user) => {
 };
 
 const userLogin= async (user) => {
-  const searchedUser = await User.findByCredentials(user.email,user.password);
+  const searchedUser = await User.findByCredentials(user.phone,user.email,user.password);
   const token = await searchedUser.generateAuthToken();
   return token ;
 }
@@ -24,6 +45,15 @@ const userLoginfb= async (user) => {
   const token = await searchedUser.generateAuthToken();
   return token ;
 }
+
+const userLogout= async (tokens, token)=>{
+  console.log("tokens before filter",tokens);
+  const filteredTokens = tokens.filter(
+    (t) => t.token !== token
+  );
+  return filteredTokens;
+}
+
 
 const activationMail = async (mail)=>{
   console.log(mail);
@@ -144,8 +174,6 @@ const update={codeRecuperation:coderecp};
 
 
 module.exports = {
-
-  addUser,userLogin,activationMail,verifyActivationCodeMail,
-  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,userLoginfb,verifyIfPhoneExistence
-
+  addUser,userLogin,userLogout,activationMail,verifyActivationCodeMail,
+  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,userLoginfb,verifyIfPhoneExistence,isUserExistByPhone, isUserExistByEmail
 };

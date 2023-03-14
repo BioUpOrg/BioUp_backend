@@ -41,4 +41,15 @@ router.get('/auth/me', auth,  userController.getConnectedUser);
 //login
 router.post('/login', userController.login);
 
+//verify email exist or not
+router.get('/existPhone/:phone', userController.existPhone);
+
+//verify phone exist or not
+router.get('/existEmail/:email', userController.existEmail);
+
+//logout
+router.post('/logout', auth, userController.logout);
+
+
+
 module.exports = router;

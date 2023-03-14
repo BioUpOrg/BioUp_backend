@@ -4,6 +4,24 @@ const utils=require('../../Presentation/utils/verifaccountutils');
 const getSmsToken=require('../../Presentation/middlwares/getSmsToken');
 const userServ =require('../../Application/UseCases/user/userService');
 
+const existPhone=async(req,res) =>{
+  try {
+    const exist = await userService.isUserExistByPhone(req.params.phone);
+    return res.status(200).send(exist)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const existEmail=async(req,res) =>{
+  try {
+    const exist = await userService.isUserExistByEmail(req.params.email);
+    return res.status(200).send(exist);
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const login = async (req, res) => {
   try {
     const user = req.body;
@@ -17,6 +35,20 @@ const login = async (req, res) => {
     res.status(e.code || 400).send({ error: e.message });
   }
 };
+
+const logout = async (req, res) => {
+  try {
+    tokens= req.user.tokens;
+    token = req.token;
+     const filteredTokens =await userService.userLogout(tokens, token);
+     req.user.tokens=filteredTokens;
+    await req.user.save();
+    res.status(200).send();
+  } catch (e) {
+    console.log(e);
+    res.status(500).send();
+  }
+}
 
  const sendActivateCodeMail = async (req, res) => {
   try{
@@ -206,7 +238,8 @@ const DesactivateUserAccount = async (req, res) => {
 
 
 module.exports = {
-  login,
+  login,logout,
   sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,getConnectedUser,
-sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist
+sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist,
+existEmail,existPhone
 };
