@@ -139,4 +139,3 @@ module.exports = {
   sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,userLoginfb,verifyIfPhoneExistence
 
 };
-
