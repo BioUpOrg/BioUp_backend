@@ -34,7 +34,13 @@ function sendEmail(email,url){
       from: 'lotfi.louiz@esprit.tn',
       to: email,
       subject: 'Email verification ',
-      text: `Please use the following link  to activate your account ${url}`
+      html: `
+    <form >
+    <h1 >Please use the following link to activate your account:</h1>
+      <img src="../../../bioup.jpeg"/>
+      <a href="${url}">${url}</a>
+    </form>
+  `
     })
     .then(() =>{
         console.log('OTP sent to  email');

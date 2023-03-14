@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { nextTick } = require('process');
 
-// Create a nodemailer transporter
+// Create a nodemailer   
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -14,36 +14,37 @@ const transporter = nodemailer.createTransport({
   //
   //
   // Generate a random verification code
-  const activationCode = crypto.randomBytes(3).toString('hex'); // 3 bytes will generate a 6-digit hex code
-  
+  const codeRecuperation = crypto.randomBytes(3).toString('hex'); // 3 bytes will generate a 6-digit hex code
+   
   // Define the email content
-  const mailOptions = {
-    from: 'habibfiras.hadroug@esprit.tn',
-    to: 'habibfiras.hadroug@esprit.tn',
-    subject: 'Password reset verification code',
-    text: `Your password reset verification code is: ${activationCode}`
-  };
+  
   
   // Send the email
   const sendps = async (req, res) => {
 try{
+  const mailOptions = {
+    from: 'habibfiras.hadroug@esprit.tn',
+    to: req.body.email,
+    subject: 'Password reset verification code',
+    text: `Your password reset verification code is: ${codeRecuperation}`
+  };
   console.log(req.body.email)
   const send = transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
     } else {
       console.log('Email sent: ' + info.response);
-      const update ={activationCode:activationCode}
+      const update ={codeRecuperation:codeRecuperation}
       const user=User.findOneAndUpdate({email:req.body.email},update,{new : true}
         
         
         )
-        .then((user,err) => {
-          if (err) {
-            console.log(err);
+        .then(resp => {
+          if (!resp) {
+           // console.log(err);
+            res.send("err");
           } else {
-            
-            res.json(user);
+            res.send("ok");
           }
         }
         )
@@ -65,9 +66,9 @@ const verifps= async (req, res,next) => {
     if (err) {
       console.log(err);
     } else {
-       if(user.activationCode==req.body.activationCode){
+       if(user.codeRecuperation==req.body.codeRecuperation){
     res.json({message:'code correct'})
-    user.activationCode = "1";
+    user.codeRecuperation = "1";
     user.save();
     // Set the user object on the request object for later use
     req.user = user;
@@ -87,19 +88,19 @@ const changeps= async (req, res) => {
   try{
     const user = await User.findOne({email:req.body.email}).then((user,err) => {
       if(user){
-        if(user.activationCode === "1"){
+        if(user.codeRecuperation === "1"){
           user.password=req.body.password;
-          user.activationCode = "";
+          user.codeRecuperation = "";
           user.save()
-          res.json({message:'changed'})
+          res.send('changed')
 
         }
         else{
-          res.json({message:'code incorrect'})
+          res.send('code incorrect')
         }
       }
       else{
-        res.json({message:'user not found'});
+        res.send('user not found');
       }
      
   

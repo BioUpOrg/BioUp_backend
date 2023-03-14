@@ -9,12 +9,12 @@ router.get('/check/activate/account/:token',userController.verifyAccountMail);
 router.put('/updateactivationcodesms/:phone',userController.sendActivateCodeSmS);
 router.get('/check/activate/accountsms/:smscode',userController.verifyAccountSms);
 router.put('/updateCodeRecupPassBySms/:phone',userController.sendCodeRecBySms);
-router.get('/check/activate/codeRecupPassBySms/',userController.verifyCodeRecBySms);
+router.get('/check/activate/:codeRecupPassBySms',userController.verifyCodeRecBySms);
 router.put('/changepassword/',userController.changePass);
 router.get('/existphone/:phone',userController.verifyIfPhoneExist);
 
 //Create New User
-router.post('/auth/', userController.addUser);
+router.post('/auth/',userController.addUser);
 //Desactivate User Account
 
 router.patch(
@@ -40,5 +40,16 @@ router.get('/auth/me', auth,  userController.getConnectedUser);
 
 //login
 router.post('/login', userController.login);
+
+//verify email exist or not
+router.get('/existPhone/:phone', userController.existPhone);
+
+//verify phone exist or not
+router.get('/existEmail/:email', userController.existEmail);
+
+//logout
+router.post('/logout', auth, userController.logout);
+
+
 
 module.exports = router;
