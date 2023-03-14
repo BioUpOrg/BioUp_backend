@@ -199,7 +199,7 @@ const getConnectedUser = async (req, res) => {
   try {
     res
       .status(200)
-      .send({ email: req.user.email, firstName: req.user.firstName });
+      .send({ email: req.user.email, firstName: req.user.firstName , lastName: req.user.lastName , role: req.user.role , pic: req.user.pic , phone: req.user.phone });
   } catch (e) {
     res.status(500).send();
   }
