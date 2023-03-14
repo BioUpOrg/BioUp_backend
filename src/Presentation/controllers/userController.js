@@ -144,6 +144,22 @@ const addUser = async (req, res) => {
   }
 };
 
+
+
+
+const getConnectedUser = async (req, res) => {
+  try {
+    res
+      .status(200)
+      .send({ email: req.user.email, firstName: req.user.firstName });
+  } catch (e) {
+    res.status(500).send();
+  }
+}
+
+
+
+
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params._id);
@@ -189,6 +205,6 @@ const DesactivateUserAccount = async (req, res) => {
 
 module.exports = {
   login,
-  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
+  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,getConnectedUser,
 sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist
 };
