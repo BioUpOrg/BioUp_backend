@@ -4,6 +4,7 @@ const sendEmail=require('../../../Presentation/middlwares/sendEmail');
 const User =require('../../../Infrastructure/Models/userModel');
 const { sendActivateCodeSmS } = require('../../../Presentation/controllers/userController');
 const getSmsToken = require('../../../Presentation/middlwares/getSmsToken');
+
 const addUser = async (user) => {
   try {
     return await userRepository.create(user);
