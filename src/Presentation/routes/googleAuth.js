@@ -31,9 +31,11 @@ googleRouter.get('/auth/callback/success' ,async function(req , res)  {
  
 	console.log("this user ",user);
    const token = await userService.userLoginfb(user);
-	res.send(token);
+	//res.send(token);
 	a=token;
-	
+	res.render('profileg', {
+		user : req.user // get the user out of session and pass to template
+	});
 	console.log("this token ",token);
 });
 googleRouter.get('/test',(req,res)=>{
