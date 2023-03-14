@@ -132,6 +132,7 @@ const cors = require('cors');
 
 const app = express();
 const passport = require('passport');
+
 const cors = require('cors');
 var cookieSession = require('cookie-session');//
 require('./Presentation/middlwares/passport');
@@ -142,6 +143,7 @@ var productsRouter = require('./Presentation/routes/products');
 var googleRouter = require('./Presentation/routes/googleAuth');
 var fbRouter = require('./Presentation/routes/fb');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
+
 
 const { json } = require( "body-parser");
 
@@ -178,14 +180,10 @@ app.use(passport.initialize());
 
 app.use(express.json());
 
-app.use(cors({
-  origin: 'http://localhost:3001',
-  methods: ['PUT','GET'],
-}));
 
 app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['PUT','Get'],
+  origin: '*'
+,  methods: ['PUT','Get']
 }));
 
 // Set up dependencies
@@ -207,6 +205,7 @@ app.use('/forget', forgetPasswordMail)
 
 // Start the server
 
-app.listen(4000, () => {
-  console.log('Server is listening on port 4000');
+app.listen(3000, () => {
+
+  console.log('Server is listening on port 3000');
 });

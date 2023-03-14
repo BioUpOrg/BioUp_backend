@@ -18,6 +18,11 @@ const userLogin= async (user) => {
   const token = await searchedUser.generateAuthToken();
   return token ;
 }
+const userLoginfb= async (user) => {
+  const searchedUser = await User.findByCredentialsfb(user.email);
+  const token = await searchedUser.generateAuthToken();
+  return token ;
+}
 
 const activationMail = async (mail)=>{
   console.log(mail);
@@ -131,6 +136,7 @@ const update={codeRecuperation:coderecp};
 module.exports = {
 
   addUser,userLogin,activationMail,verifyActivationCodeMail,
-  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,verifyIfPhoneExistence
+  sendCodeRecPassSms,verifyCodeRecPassSms,changedPass,sendActivationCodeBySms,userLoginfb,verifyIfPhoneExistence
+
 };
 

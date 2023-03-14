@@ -5,6 +5,7 @@ require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
 
+
   firstName: { type: String, default:''},
   lastName: { type: String, default:''},
   email: { type: String ,default:''},
@@ -52,6 +53,7 @@ userSchema.methods.generateAuthToken = async function generateAuthToken() {
   return token;
 };
 
+
 userSchema.statics.findByCredentials = async function findByCredentials(
   email,
   password
@@ -72,6 +74,20 @@ userSchema.statics.findByCredentials = async function findByCredentials(
     error.code = 401;
     throw error;
   }
+  return user;
+};
+userSchema.statics.findByCredentialsfb = async function findByCredentialsfb(
+  email
+) {
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    const error = new Error(
+      'Impossible de se connecter , utilisateur non enregistré'
+    );
+    error.code = 404;
+    throw error;
+  }
+  
   return user;
 };
 
