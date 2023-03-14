@@ -34,6 +34,10 @@ router.get('/', function(req, res, next) {
   res.send('users list page !'); 
 });
 
+// Read connected user
+router.get('/auth/me', auth,  userController.getConnectedUser);
+
+
 //login
 router.post('/login', userController.login);
 

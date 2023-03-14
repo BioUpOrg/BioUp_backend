@@ -108,10 +108,21 @@ const changePass =async (req,res)=>{
 //Create New User
 const addUser = async (req, res) => {
   try {
-    const userIsExist = (await User.exists({ email: req.body.email })) || null;
-    if (userIsExist) {
-      return res.status(409).send({ error: 'User is already registered' });
+    if(req.body.email!==""){
+      const userIsExist = (await User.exists({ email: req.body.email })) || null;
+      if (userIsExist) {
+        console.log("Email Alerady Exists ")
+        return res.status(409).send({ error: 'User Email is already registered'  , field: 'email'});
+      }
     }
+    if(req.body.phone!==""){
+    const userIsExist = (await User.exists({ phone: req.body.phone })) || null;
+    if (userIsExist) {
+      console.log("Phone Alerady Exists ")
+      return res.status(409).send({ error: 'User Phone is already registered', field: 'phone'  });
+    }
+  }
+
 
     const user = new User({
       ...req.body,
@@ -134,6 +145,22 @@ const addUser = async (req, res) => {
     res.status(500).send();
   }
 };
+
+
+
+
+const getConnectedUser = async (req, res) => {
+  try {
+    res
+      .status(200)
+      .send({ email: req.user.email, firstName: req.user.firstName });
+  } catch (e) {
+    res.status(500).send();
+  }
+}
+
+
+
 
 const getUserById = async (req, res) => {
   try {
@@ -180,6 +207,6 @@ const DesactivateUserAccount = async (req, res) => {
 
 module.exports = {
   login,
-  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,
+  sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,getConnectedUser,
 sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist
 };
