@@ -67,15 +67,15 @@ const verifps= async (req, res,next) => {
       console.log(err);
     } else {
        if(user.codeRecuperation==req.body.codeRecuperation){
-    res.json({message:'code correct'})
-    user.codeRecuperation = "1";
+        res.send("ok");
+        user.codeRecuperation = "1";
     user.save();
     // Set the user object on the request object for later use
     req.user = user;
 
 
   }else{
-    res.json({message:'code incorrect'})
+    res.send("err");
   }
     }
 
