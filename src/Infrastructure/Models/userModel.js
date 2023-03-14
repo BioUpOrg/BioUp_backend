@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
+  firstName: { type: String },
   email: { type: String ,default:''},
   password: { type: String, default: '' },
   phone:{ type: String,default:''},
@@ -50,6 +50,7 @@ userSchema.methods.generateAuthToken = async function generateAuthToken() {
   return token;
 };
 
+
 userSchema.statics.findByCredentials = async function findByCredentials(
   email,
   password
@@ -70,6 +71,20 @@ userSchema.statics.findByCredentials = async function findByCredentials(
     error.code = 401;
     throw error;
   }
+  return user;
+};
+userSchema.statics.findByCredentialsfb = async function findByCredentialsfb(
+  email
+) {
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    const error = new Error(
+      'Impossible de se connecter , utilisateur non enregistré'
+    );
+    error.code = 404;
+    throw error;
+  }
+  
   return user;
 };
 

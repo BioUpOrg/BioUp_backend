@@ -3,6 +3,7 @@ const express = require('express');
 
 
 const app = express();
+const cors = require('cors');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 require('./Presentation/middlwares/passport');
@@ -37,6 +38,10 @@ app.use(passport.session());
 
 
 app.use(express.json());
+app.use(cors({
+  origin: '*',
+  methods: ['PUT','POST','GET','DELETE','OPTIONS'],
+}));
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/google', googleRouter);
