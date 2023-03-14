@@ -4,6 +4,31 @@ const utils=require('../../Presentation/utils/verifaccountutils');
 const getSmsToken=require('../../Presentation/middlwares/getSmsToken');
 const userServ =require('../../Application/UseCases/user/userService');
 
+const omit = require('../utils/omit');
+const uploadImage = require('../utils/cloudinary/uploadImage');
+const fs = require('fs');
+const path = require('path');
+
+
+
+const existPhone=async(req,res) =>{
+  try {
+    const exist = await userService.isUserExistByPhone(req.params.phone);
+    return res.status(200).send(exist)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const existEmail=async(req,res) =>{
+  try {
+    const exist = await userService.isUserExistByEmail(req.params.email);
+    return res.status(200).send(exist);
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const login = async (req, res) => {
   try {
     const user = req.body;
@@ -17,6 +42,20 @@ const login = async (req, res) => {
     res.status(e.code || 400).send({ error: e.message });
   }
 };
+
+const logout = async (req, res) => {
+  try {
+    tokens= req.user.tokens;
+    token = req.token;
+     const filteredTokens =await userService.userLogout(tokens, token);
+     req.user.tokens=filteredTokens;
+    await req.user.save();
+    res.status(200).send();
+  } catch (e) {
+    console.log(e);
+    res.status(500).send();
+  }
+}
 
  const sendActivateCodeMail = async (req, res) => {
   try{
@@ -34,11 +73,11 @@ const verifyAccountMail =  async (req, res) => {
   try{
     const user =await userServ.verifyActivationCodeMail(req.params.token); 
     console.log(user);
-    res.status(200).send(user);
+    res.send('verified');
 
     //
   }catch(e){
-    res.status(500).send('link expire '+e);
+    res.send('unverified');
   }
  
 }
@@ -62,30 +101,32 @@ const verifyAccountSms = async (req, res) => {
     const user = await User.findOne({activationCode:smscode}); 
       user.statusActivation = true;
       await user.save();
-      res.send('activation avec succées')
+      console.log(user);
+      res.send('activation avec succées');
   }catch(e){
     res.send('code invalid');
   }
- 
-   
+  
 }
 const sendCodeRecBySms =async (req,res)=>{
   try{
     const user = await userServ.sendCodeRecPassSms(req.params.phone);
     console.log(user);
-    res.status(200).send(user);
+    res.send('sent')
   }catch(e){
-    res.status(500).send('error get token '+e);
+    res.send('error');
   }
 }
 
 const verifyCodeRecBySms = async (req, res) => {
-  const { phone, code } = req.body;
+ console.log(req.query)
   try {
-    const user = await userServ.verifyCodeRecPassSms(phone, code);
-    res.status(200).send(user);
+    const user = await userServ.verifyCodeRecPassSms(req.query.phone, req.query.code);
+    console.log(user);
+    res.send('succes');
   } catch (e) {
-    res.status(400).send({ error: e.message });
+    console.log(e)
+   res.send('error');
   }
 };
 
@@ -93,17 +134,14 @@ const changePass =async (req,res)=>{
   const {phone,password}=req.body;
   try {
     const user = await userServ.changedPass(phone,password);
-    res.status(200).send(user);
+    res.send('succes');
   } catch (e) {
-    res.status(400).send({ error: e.message });
+    res.send('error');
   }
 }
 
  
 
-
-
-//Create New User
 const addUser = async (req, res) => {
   try {
     if(req.body.email!==""){
@@ -121,10 +159,23 @@ const addUser = async (req, res) => {
     }
   }
 
+  const userData = omit(req.body, ['file']);
+  const user = new User(userData);
 
-    const user = new User({
-      ...req.body,
-    });
+
+  if (Object.keys(req.files || {}).length > 0) {
+
+    const image = req.files.file[0] || req.body.file || { path: '' };
+    const uploadedImage = await uploadImage(image.path);
+
+    user.pic = uploadedImage ? uploadedImage.url : '';
+    if (uploadedImage) {
+      let filePath = path.join(`${__dirname}/../../`, image.path);
+      if (filePath.includes('uploads')) {
+        fs.unlink(filePath, () => {});
+      }
+    }
+  }
     await user.save();
     if(user.phone===""){
       await userServ.activationMail(req.body.email);
@@ -143,9 +194,6 @@ const addUser = async (req, res) => {
     res.status(500).send();
   }
 };
-
-
-
 
 const getConnectedUser = async (req, res) => {
   try {
@@ -204,7 +252,8 @@ const DesactivateUserAccount = async (req, res) => {
 
 
 module.exports = {
-  login,
+  login,logout,
   sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,getConnectedUser,
-sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist
+sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist,
+existEmail,existPhone
 };

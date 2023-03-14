@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `${__dirname}/../Database/.env` });
 
 const userSchema = new mongoose.Schema({
+
   firstName: { type: String, default:''},
   lastName: { type: String, default:''},
   email: { type: String ,default:''},
@@ -15,14 +16,14 @@ const userSchema = new mongoose.Schema({
   activationCode:{type :String,default:''},
   //codeExpireDate:{type:String},
   statusActivation:{type:Boolean,default:false},
+  codeRecuperation: {type:String, default:''},
+  isBlocked: { type: Boolean, default: false },
   uid: {type: String},
   gender: {type : String} ,
   pic:{type : String} ,
   token:{type : String} ,
 
 
-  codeRecuperation: {type:String, default:''},
-  isBlocked: { type: Boolean, default: true },
 
   tokens: [
     {
@@ -40,8 +41,9 @@ userSchema.methods.generateAuthToken = async function generateAuthToken() {
   const token = jwt.sign(
     {
       _id: user._id.toString(),
-      email: user.email,
-      firstName: user.firstName,
+      email: user.email||"",
+      phone: user.phone||"",
+      firstName: user.firstName||"",
       role: user.role,
     },
     process.env.PRIVATEKEY
@@ -53,21 +55,44 @@ userSchema.methods.generateAuthToken = async function generateAuthToken() {
 
 
 userSchema.statics.findByCredentials = async function findByCredentials(
+  phone,
   email,
   password
 ) {
-  const user = await userModel.findOne({ email });
+  var user;
+  if(phone!=="" && email!==""){
+    user = await userModel.findOne({ email, phone });
+  }else if(phone!==""){
+    user = await userModel.findOne({ phone });
+  }else if(email!==""){
+    user = await userModel.findOne({ email });
+  }
+  
   if (!user) {
     const error = new Error(
-      'Impossible de se connecter , utilisateur non enregistré'
+      'USER_NOT_FOUND'
     );
     error.code = 404;
+    throw error;
+  }
+  if(!user.isActivated){
+    const error = new Error(
+      'NOT_ACTIVATED'
+    );
+    error.code = 401;
+    throw error;
+  }
+  if(user.isBlocked){
+    const error = new Error(
+      'BLOCKED'
+    );
+    error.code = 401;
     throw error;
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     const error = new Error(
-      'Impossible de se connecter, email ou mot de passe incorrecte'
+      'INCORRECT_PASSWORD'
     );
     error.code = 401;
     throw error;

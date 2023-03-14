@@ -1,4 +1,5 @@
 
+
 const express = require('express');
 
 // const connect = require('./Infrastructure/Database/mongodb');
@@ -11,8 +12,8 @@ const cors = require('cors');
 
 const app = express();
 const passport = require('passport');
+const multer = require('multer');
 
-const cors = require('cors');
 var cookieSession = require('cookie-session');//
 require('./Presentation/middlwares/passport');
 
@@ -24,30 +25,35 @@ var googleRouter = require('./Presentation/routes/googleAuth');
 var fbRouter = require('./Presentation/routes/fb');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 
-
+var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
 
+app.use(
+  multer({
+    limits: { fieldSize: 100 * 1024 * 1024 },
+    dest: 'uploads/',
+  }).fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'video', maxCount: 1 },
+  ])
+);
+app.use(cors({
+  origin: 'http://localhost:4000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true 
+}));
 
-const mongoose = require('mongoose');
+
+
 require('dotenv').config({ path: `${__dirname}/.env` });
 
-mongoose.connect(
-  'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
-  console.log('connected to database !!!!'),
-{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  }
-);
+
 app.use(cookieSession({
 	name: 'google-auth-session',
 	keys: ['key1', 'key2']
 }));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(passport.initialize());
+
+
 app.use(json());
 app.set("view engine","ejs")
 const session = require('express-session')
@@ -61,14 +67,18 @@ app.use(passport.initialize());
     app.use(passport.session()); 
     app.use(cookieParser());
 
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
+mongoose.connect(
+  'mongodb+srv://BioUpDataBase:4CB4OrcVWrlP1LvW@bioup.gkbagbx.mongodb.net/?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true
+  },
+  console.log('connected to database !!!!'),
+);
+
+
 app.use(express.json());
-
-
-app.use(cors({
-  origin: '*'
-,  methods: ['PUT','Get']
-}));
-
 
 
 
@@ -85,6 +95,5 @@ app.use('/forget', forgetPasswordMail)
 // Start the server
 
 app.listen(3000, () => {
-
   console.log('Server is listening on port 3000');
 });

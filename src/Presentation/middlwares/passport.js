@@ -37,7 +37,8 @@ function(request, accessToken, refreshToken, profile, done) {
 
             // set all of the facebook information in our user model
             newUser.email = profile.emails[0].value;; // we will save the token that facebook provides to the user 
-            newUser.firstName =         profile.name.givenName;           
+            newUser.firstName =         profile.name.givenName;       
+            newUser.token = accessToken; // facebook can return multiple emails so we'll take the first    
         
             // save our user to the database
             newUser.save(function(err) {
