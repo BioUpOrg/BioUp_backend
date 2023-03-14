@@ -180,8 +180,8 @@ app.use(express.json());
 
 
 app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['PUT','Get'],
+  origin: ['http://localhost:3000','http://localhost:3001']
+,  methods: ['PUT','Get'],
 }));
 
 // Set up dependencies

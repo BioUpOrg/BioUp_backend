@@ -4,7 +4,7 @@ const userController = require( "../controllers/facebookConnect");
 const userService = require("../../Application/UseCases/user/userService");
 const bcrypt = require("bcrypt");
 //const User = require("../../Infrastructure/Models/userModel");
-
+var a ="";
  
 const userRouter = express.Router();
 
@@ -25,6 +25,7 @@ function isLoggedIn(req, res, next) {
 
   // if they aren't redirect them to the home page
   res.redirect('/');
+
 }
 
 userRouter.get('/profile', isLoggedIn, async function(req, res) {
@@ -35,9 +36,15 @@ userRouter.get('/profile', isLoggedIn, async function(req, res) {
   console.log("this user ",user);
  const token = await userService.userLoginfb(user);
   res.send(token);
+  a=token;
+  
   console.log("this token ",token);
 
 });
+userRouter.get('/test',(req,res)=>{
+  res.send( a);
+}
+)
 
 userRouter.get("/fail", (req, res) => {
   res.send("Failed attempt");
