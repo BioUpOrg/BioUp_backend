@@ -12,6 +12,7 @@ const cors = require('cors');
 
 const app = express();
 const passport = require('passport');
+const multer = require('multer');
 
 var cookieSession = require('cookie-session');//
 require('./Presentation/middlwares/passport');
@@ -27,8 +28,17 @@ var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
 
+app.use(
+  multer({
+    limits: { fieldSize: 100 * 1024 * 1024 },
+    dest: 'uploads/',
+  }).fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'video', maxCount: 1 },
+  ])
+);
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:4000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true 
 }));
@@ -67,6 +77,7 @@ mongoose.connect(
   console.log('connected to database !!!!'),
 );
 
+
 app.use(express.json());
 
 
@@ -82,6 +93,7 @@ app.use('/forget', forgetPasswordMail)
 
 
 // Start the server
+
 app.listen(3000, () => {
   console.log('Server is listening on port 3000');
 });

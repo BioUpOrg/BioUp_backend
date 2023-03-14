@@ -4,6 +4,13 @@ const utils=require('../../Presentation/utils/verifaccountutils');
 const getSmsToken=require('../../Presentation/middlwares/getSmsToken');
 const userServ =require('../../Application/UseCases/user/userService');
 
+const omit = require('../utils/omit');
+const uploadImage = require('../utils/cloudinary/uploadImage');
+const fs = require('fs');
+const path = require('path');
+
+
+
 const existPhone=async(req,res) =>{
   try {
     const exist = await userService.isUserExistByPhone(req.params.phone);
@@ -135,9 +142,6 @@ const changePass =async (req,res)=>{
 
  
 
-
-
-//Create New User
 const addUser = async (req, res) => {
   try {
     if(req.body.email!==""){
@@ -155,10 +159,23 @@ const addUser = async (req, res) => {
     }
   }
 
+  const userData = omit(req.body, ['file']);
+  const user = new User(userData);
 
-    const user = new User({
-      ...req.body,
-    });
+
+  if (Object.keys(req.files || {}).length > 0) {
+
+    const image = req.files.file[0] || req.body.file || { path: '' };
+    const uploadedImage = await uploadImage(image.path);
+
+    user.pic = uploadedImage ? uploadedImage.url : '';
+    if (uploadedImage) {
+      let filePath = path.join(`${__dirname}/../../`, image.path);
+      if (filePath.includes('uploads')) {
+        fs.unlink(filePath, () => {});
+      }
+    }
+  }
     await user.save();
     if(user.phone===""){
       await userServ.activationMail(req.body.email);
@@ -177,9 +194,6 @@ const addUser = async (req, res) => {
     res.status(500).send();
   }
 };
-
-
-
 
 const getConnectedUser = async (req, res) => {
   try {
