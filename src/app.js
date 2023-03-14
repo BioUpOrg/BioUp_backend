@@ -180,8 +180,8 @@ app.use(express.json());
 
 
 app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['PUT','GET'],
+  origin: '*',
+  methods: ['PUT','GET']
 }));
 
 // Set up dependencies
@@ -203,6 +203,6 @@ app.use('/forget', forgetPasswordMail)
 
 // Start the server
 
-app.listen(5000, () => {
+app.listen(3000, () => {
   console.log('Server is listening on port 5000');
 });
