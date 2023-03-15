@@ -28,7 +28,7 @@ var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:4000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true 
 }));

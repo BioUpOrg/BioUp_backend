@@ -66,7 +66,7 @@ const verifyAccountMail =  async (req, res) => {
   try{
     const user =await userServ.verifyActivationCodeMail(req.params.token); 
     console.log(user);
-    res.send('verified');
+    res.send(user);
 
     //
   }catch(e){
