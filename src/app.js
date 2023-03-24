@@ -25,6 +25,8 @@ var googleRouter = require('./Presentation/routes/googleAuth');
 var fbRouter = require('./Presentation/routes/fb');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 
+var FarmRouter = require('./Presentation/routes/farms');
+
 var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
 
@@ -88,6 +90,9 @@ app.use('/google', googleRouter);
 app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
 app.use('/forget', forgetPasswordMail)
+
+
+app.use('/farms',FarmRouter);
 
 
 
