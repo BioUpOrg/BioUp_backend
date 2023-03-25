@@ -27,6 +27,7 @@ var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 
 var FarmRouter = require('./Presentation/routes/farms');
 var PlantRouter = require('./Presentation/routes/plants');
+var AnimalRouter = require('./Presentation/routes/animals');
 
 var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
@@ -95,6 +96,7 @@ app.use('/forget', forgetPasswordMail)
 
 app.use('/farms',FarmRouter);
 app.use('/plants',PlantRouter);
+app.use('/animals',AnimalRouter);
 
 
 
