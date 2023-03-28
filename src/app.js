@@ -19,6 +19,7 @@ require('./Presentation/middlwares/passport');
 
 
 var usersRouter = require('./Presentation/routes/users');
+var contractroutes=require('./Presentation/routes/contractroutes');
 var productsRouter = require('./Presentation/routes/products');
 var googleRouter = require('./Presentation/routes/googleAuth');
 
@@ -87,8 +88,8 @@ app.use('/products', productsRouter);
 app.use('/google', googleRouter);
 app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
-app.use('/forget', forgetPasswordMail)
-
+app.use('/forget', forgetPasswordMail);
+app.use('/contract',contractroutes);
 
 
 
