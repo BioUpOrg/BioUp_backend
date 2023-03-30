@@ -12,4 +12,17 @@ const addContract = async (req,res) => {
         throw new Error('Could not create contract');
     }
 }
-module.exports={addContract}; 
+const FindContractByUserID = async (req,res) => {
+    try {
+        const userid = req.params.userid;
+        const cont= await contServ.FindContractByUserID(userid);
+         console.log("cont c id",userid);
+        res.status(200).json(cont);
+        
+    } catch (err) {
+        console.error(err);
+        throw new Error('Could not  find user  contract');
+    }
+}
+
+module.exports={addContract,FindContractByUserID}; 
