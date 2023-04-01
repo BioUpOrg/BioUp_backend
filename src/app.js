@@ -28,6 +28,7 @@ var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 var FarmRouter = require('./Presentation/routes/farms');
 var PlantRouter = require('./Presentation/routes/plants');
 var AnimalRouter = require('./Presentation/routes/animals');
+var ratingRouter = require('./Presentation/routes/rating');
 
 var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
@@ -43,7 +44,7 @@ app.use(
 );
 app.use(cors({
   origin: 'http://localhost:4000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'],
   credentials: true 
 }));
 
@@ -97,6 +98,7 @@ app.use('/forget', forgetPasswordMail)
 app.use('/farms',FarmRouter);
 app.use('/plants',PlantRouter);
 app.use('/animals',AnimalRouter);
+app.use('/rating',ratingRouter)
 
 
 
