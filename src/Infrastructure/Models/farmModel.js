@@ -15,7 +15,9 @@ const farmSchema = new mongoose.Schema({
         position: {
           x: { type: Number, default: 0 },
           y: { type: Number, default: 0 }
-        }
+        },
+        _id: false
+        
       }],
       
       animals: [{
@@ -23,7 +25,8 @@ const farmSchema = new mongoose.Schema({
         position: {
           x: { type: Number, default: 0 },
           y: { type: Number, default: 0 }
-        }
+        },
+        _id: false
       }],
 });
 
