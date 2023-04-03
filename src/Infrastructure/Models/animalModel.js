@@ -10,6 +10,7 @@ const animalSchema = new mongoose.Schema({
     vaccinations: { type: [String] },
     feedingSchedule: { type: String },
     price: { type: Number, required: true },
+    quantity: { type: Number },
     Farm: { type: mongoose.Schema.Types.ObjectId, ref: 'Farm' }
 
 });
