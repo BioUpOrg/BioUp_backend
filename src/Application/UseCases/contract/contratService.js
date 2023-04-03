@@ -1,4 +1,6 @@
- const Contract =require('../../../Infrastructure/Models/contratModel');
+ const { response } = require('express');
+const Contract =require('../../../Infrastructure/Models/contratModel');
+const { update } = require('../../../Infrastructure/Models/userModel');
 const addContract = async (c)=>{
     try {
         const contract = await Contract.create(c);
@@ -19,4 +21,14 @@ const FindContractByUserID=async(userid)=>{
         console.log(error,"could not find a contract by user id")
     }
 }
-module.exports={addContract,FindContractByUserID};
+const saveSignature=async(signature,userid)=>{
+    try{
+      const  update= {signature:signature};
+        const sig=await Contract.findOneAndUpdate({user:userid},update,{new:true}).then(response=>{
+            console.log(response);
+        })
+    }catch(e){
+        console.log(e,"could not save signature")
+    }
+}
+module.exports={addContract,FindContractByUserID,saveSignature};
