@@ -17,6 +17,7 @@ const getAllAnimals = async (req, res) => {
 
 
 const addAnimal= async (req, res) => {
+    console.log(req.body)
     const animal = new Animal({
         name : req.body.name,
         image : req.body.image,
@@ -28,8 +29,8 @@ const addAnimal= async (req, res) => {
         feedingSchedule: req.body.feedingSchedule,
         price: req.body.price,
         quantity: req.body.quantity,
+        user: req.body.user,
         Farm: req.body.Farm
-
     });
     try {
 
