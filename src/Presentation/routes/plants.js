@@ -40,6 +40,7 @@ router.post('/add', async (req, res) => {
         harvestTime: req.body.harvestTime,
         quantity: req.body.quantity,
         spacing: req.body.spacing,
+        user: req.body.user,
         Farm: req.body.Farm
     });
     try {

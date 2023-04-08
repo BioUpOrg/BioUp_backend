@@ -9,8 +9,9 @@ const animalSchema = new mongoose.Schema({
     healthStatus: { type: String },
     vaccinations: { type: [String] },
     feedingSchedule: { type: String },
-    price: { type: Number, required: true },
+    price: { type: Number },
     quantity: { type: Number },
+    user:{ type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     Farm: { type: mongoose.Schema.Types.ObjectId, ref: 'Farm' }
 
 });
