@@ -35,6 +35,7 @@ router.post('/add', async (req, res) => {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         type: req.body.type,
+        area: req.body.area,
         user: req.body.user,
         plants: req.body.plants,
         animals: req.body.animals
@@ -64,6 +65,9 @@ router.patch('/:id', getFarm, async (req, res) => {
     }
     if(req.body.type!=null){
         res.farm.type=req.body.type
+    }
+    if(req.body.area!=null){
+        res.farm.area=req.body.area
     }
     if(req.body.user!=null){
         res.farm.user=req.body.user
