@@ -5,6 +5,7 @@ const farmSchema = new mongoose.Schema({
     latitude: { type: Number },
     longitude: { type: Number },
     type: { type: String, default: '' },
+    area: { type: Number },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 
