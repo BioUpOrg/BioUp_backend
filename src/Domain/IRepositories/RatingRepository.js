@@ -1,5 +1,6 @@
 const Rating = require('../Entities/rating');
 const ratingModel = require('../../Infrastructure/Models/ratingModel');
+const productModel = require('../../Infrastructure/Models/productModel');
 const create = async (ratingData) => {
     try {
       const rating = new Rating(ratingData);
@@ -20,14 +21,28 @@ const getAll = async () => {
         throw new Error('Could not get ratings');
     }
 }
-const getRating = async (ratingId) => {
+const getRating = async (product) => {
+    var total = 0;
+    var average = 0;
     try {
-        const ratring = await ratingModel.findById(ratingId);
-        return ratring.toObject();
+        const ratrins = await ratingModel.find({product:product});
+         ratrins.map(
+            (rating) => {
+                total+=rating.ratingValue;
+                average = total/ratrins.length;
+             //   console.log("total",total)
+             //   console.log("average",average)
+             //   return rating.toObject()
+            }
+            );
+            const productupdated = await productModel.findByIdAndUpdate(product,{rating:average});
+
+            return productupdated.toObject();
     } catch (err) {
         console.error(err);
         throw new Error('Could not get rating');
     }
+
 }
 const update = async (ratingData,ratingId) => {
     try {

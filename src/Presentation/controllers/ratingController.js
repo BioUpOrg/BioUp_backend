@@ -50,14 +50,15 @@ const deleteRating = async (req, res) => {
 }
 const getRating = async (req, res) => {
     try{
-        const ratingId = req.params.id;
-        const rating = await ratingService.getRating(ratingId);
+        const product = req.params.product;
+        const rating = await ratingService.getRating(product);
         res.status(200).json(rating);
     }
     catch(err){
         console.error(err);
         res.status(500).json({message: 'Internal Server Error rating'});
     }
+        
 }
 
 module.exports = {

@@ -33,13 +33,14 @@ const addRating = async (rating) => {
         throw new Error('Could not delete rating');
     }
     }
-    const getRating = async (ratingId) => {
+    const getRating = async (product) => {
         try {
-            return await ratingRepository.getRating(ratingId);
+            return await ratingRepository.getRating(product);
         } catch (err) {
             console.error(err);
             throw new Error('Could not get rating');
         }
+           
     }
     module.exports = {
         addRating,getRatings,updateRating,deleteRating,getRating

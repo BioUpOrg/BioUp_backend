@@ -6,6 +6,11 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },  
+  rating :{type : Number},
+  categorie: {type : String},
+  quantity: {type : Number},
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+
 });
 
 const productModel = mongoose.model('Product', productSchema);
