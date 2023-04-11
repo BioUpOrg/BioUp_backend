@@ -8,7 +8,42 @@ const addProduct = async (product) => {
     throw new Error('Could not create product');
   }
 };
+const getProducts = async () => {
+  try {
+    return await productRepository.getAll();
+  } catch (err) {
+    console.error(err);
+    throw new Error('Could not get products');
+  }
+};
+const updateProduct = async (product,productId) => {
+  try {
+    return await productRepository.update(product,productId);
+  } catch (err) {
+    console.error(err);
+    throw new Error('Could not update product');
+  }
+};
+
+const deleteProduct = async (productId) => {
+  try {
+    return await productRepository.deleteProduct(productId);
+  } catch (err) {
+    console.error(err);
+    throw new Error('Could not delete product');
+  }
+};
+const getProduct = async (productId) => {
+  try {
+    return await productRepository.getProduct(productId);
+  } catch (err) {
+    console.error(err);
+    throw new Error('Could not get product');
+  }
+};
+
+
 
 module.exports = {
-    addProduct,
+    addProduct,getProducts,updateProduct,deleteProduct,getProduct
 };
