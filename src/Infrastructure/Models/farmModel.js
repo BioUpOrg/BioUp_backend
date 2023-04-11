@@ -5,6 +5,7 @@ const farmSchema = new mongoose.Schema({
     latitude: { type: Number },
     longitude: { type: Number },
     type: { type: String, default: '' },
+    area: { type: Number },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 
@@ -15,7 +16,9 @@ const farmSchema = new mongoose.Schema({
         position: {
           x: { type: Number, default: 0 },
           y: { type: Number, default: 0 }
-        }
+        },
+        _id: false
+        
       }],
       
       animals: [{
@@ -23,7 +26,8 @@ const farmSchema = new mongoose.Schema({
         position: {
           x: { type: Number, default: 0 },
           y: { type: Number, default: 0 }
-        }
+        },
+        _id: false
       }],
 });
 

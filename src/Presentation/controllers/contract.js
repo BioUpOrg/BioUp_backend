@@ -25,4 +25,14 @@ const FindContractByUserID = async (req,res) => {
     }
 }
 
-module.exports={addContract,FindContractByUserID}; 
+const saveSignaturecontroller =async(req,res)=>{
+    try{
+        const signature=req.body.signature;
+        const userid=req.body.userid;
+        const sig=await contServ.saveSignature(signature,userid);
+        res.status(200).send(sig);
+    }catch(e){
+        console.log(e,"could not save signature")
+    }
+}
+module.exports={addContract,FindContractByUserID,saveSignaturecontroller}; 
