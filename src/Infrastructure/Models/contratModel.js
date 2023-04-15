@@ -18,7 +18,7 @@ const contractModel=new mongoose.Schema({
            
 },
     statuscontract:{type:Boolean,default:false, require:false},
-    signature :{type:Boolean, default:false}
+    signature :{type:String}
 
 }
 

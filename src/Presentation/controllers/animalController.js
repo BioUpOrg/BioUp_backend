@@ -15,7 +15,9 @@ const getAllAnimals = async (req, res) => {
 }
 
 
+
 const addAnimal= async (req, res) => {
+    console.log(req.body)
     const animal = new Animal({
         name : req.body.name,
         image : req.body.image,
@@ -26,8 +28,9 @@ const addAnimal= async (req, res) => {
         vaccinations: req.body.vaccinations,
         feedingSchedule: req.body.feedingSchedule,
         price: req.body.price,
+        quantity: req.body.quantity,
+        user: req.body.user,
         Farm: req.body.Farm
-
     });
     try {
 
@@ -72,10 +75,14 @@ const updateAnimal=async (req, res) => {
     if(req.body.price!=null){
         res.animal.price=req.body.price
     }
+    if(req.body.quantity!=null){
+        res.animal.quantity=req.body.quantity
+    }
 
     if(req.body.Farm!=null){
         res.animal.Farm=req.body.Farm
     }
+
   
     try {
         const updatedAnimal = await res.animal.save()

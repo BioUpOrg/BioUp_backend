@@ -6,10 +6,13 @@ const farmModel = require('../../Infrastructure/Models/farmModel');
 router.get('/', async (req, res) => {
 
     try{
-        const farms=await farmModel.find()
+        const farms = await farmModel.find()
+            .populate('plants.plant')
+            .populate('animals.animal')
+        
         res.status(200).json(farms)
-    }catch(err){
-        res.status(500).json({message:err.message})
+    } catch(err) {
+        res.status(500).json({message: err.message})
     }
 
 });
@@ -26,11 +29,13 @@ router.get('/:id', getFarm , (req, res) => {
 
 //Creating Farm
 router.post('/add', async (req, res) => {
+    console.log(req.body)
     const farm = new farmModel({
         name: req.body.name,
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         type: req.body.type,
+        area: req.body.area,
         user: req.body.user,
         plants: req.body.plants,
         animals: req.body.animals
@@ -60,6 +65,9 @@ router.patch('/:id', getFarm, async (req, res) => {
     }
     if(req.body.type!=null){
         res.farm.type=req.body.type
+    }
+    if(req.body.area!=null){
+        res.farm.area=req.body.area
     }
     if(req.body.user!=null){
         res.farm.user=req.body.user
