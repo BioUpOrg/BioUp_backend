@@ -5,6 +5,7 @@ const ratingModel = require('../../Infrastructure/Models/ratingModel');
 const create = async (productData) => {
   try {
     const product = new Product(productData);
+    console.log(product);
     const createdProduct = await productModel.create(product);
     return createdProduct.toObject();
   } catch (err) {

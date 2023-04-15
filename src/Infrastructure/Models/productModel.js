@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema({
   categorie: {type : String},
   quantity: {type : Number},
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  pic : {type : String},
 
 });
 
