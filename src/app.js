@@ -30,7 +30,9 @@ var FarmRouter = require('./Presentation/routes/farms');
 var PlantRouter = require('./Presentation/routes/plants');
 var AnimalRouter = require('./Presentation/routes/animals');
 var ratingRouter = require('./Presentation/routes/rating');
-
+var compostsRouter = require('./Presentation/routes/composts');
+var commandsRouter = require('./Presentation/routes/commands');
+var shipmentroute=require('./Presentation/routes/shipmentroute');
 var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
 
@@ -96,11 +98,13 @@ app.use('/forget', forgetPasswordMail)
 app.use('/fb', fbRouter);
 app.use('/forget', forgetPasswordMail);
 app.use('/contract',contractroutes);
-
 app.use('/farms',FarmRouter);
 app.use('/plants',PlantRouter);
 app.use('/animals',AnimalRouter);
 app.use('/rating',ratingRouter)
+app.use('/composts',compostsRouter)
+app.use('/commands',commandsRouter)
+app.use('/shipment',shipmentroute);
 
 
 
