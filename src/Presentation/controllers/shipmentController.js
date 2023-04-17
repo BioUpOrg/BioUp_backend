@@ -26,7 +26,16 @@ const findCommandesNotDelivered=async (req,res)=>{
             throw new Error('Could not create shipment');
         }
     }
-
+const getMyshipment=async (req,res)=>{
+    try {
+        const id = req.params.id;
+        const myshipment = await shipmentServ.getMyShipment(id);
+        res.status(200).send(myshipment);
+        console.log(myshipment);
+    } catch (error) {
+        console.log(error,"could not get my shipment ")
+    }
+}
 module.exports={
-    findCommandesNotDelivered,addShipment
+    findCommandesNotDelivered,addShipment,getMyshipment
 }
