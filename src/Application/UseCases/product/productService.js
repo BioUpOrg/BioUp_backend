@@ -16,6 +16,15 @@ const getProducts = async () => {
     throw new Error('Could not get products');
   }
 };
+const getProductUser = async (userId) => {
+  try {
+    return await productRepository.getProductUser(userId);
+  } catch (err) {
+    console.error(err);
+    throw new Error('Could not get products');
+  }
+};
+
 const updateProduct = async (product,productId) => {
   try {
     return await productRepository.update(product,productId);
@@ -45,5 +54,5 @@ const getProduct = async (productId) => {
 
 
 module.exports = {
-    addProduct,getProducts,updateProduct,deleteProduct,getProduct
+    addProduct,getProducts,updateProduct,deleteProduct,getProduct,getProductUser
 };

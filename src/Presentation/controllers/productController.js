@@ -40,6 +40,17 @@ const addProduct = async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error products' });
     }
   };
+  const getProductsUser = async (req, res) => {
+    try {
+      const user = req.params.id;
+      console.log("constroller",user);
+      const products = await productService.getProductUser(user);
+      res.status(200).json(products);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Internal Server Error products' });
+    }
+  };
   const updateProduct = async (req, res) => {
     try {
       const product = req.body; // assuming user details are passed in the request body
@@ -76,5 +87,5 @@ const addProduct = async (req, res) => {
 
 
 module.exports = {
-    addProduct,getProducts,updateProduct,deleteProduct,getProduct
+    addProduct,getProducts,updateProduct,deleteProduct,getProduct,getProductsUser
 };
