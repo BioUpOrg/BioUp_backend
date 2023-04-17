@@ -24,4 +24,14 @@ const addShipment = async (s)=>{
     }
  
 }
-module.exports={addShipment};
+const getMyShipment= async ( id )=>{
+
+    try{
+        const mymission= Shipment.findOne({shipment_agent:id});
+        return mymission;
+    }catch(e){
+        console.log(e,"could not get my shipment")
+    }
+  
+}
+module.exports={addShipment,getMyShipment};
