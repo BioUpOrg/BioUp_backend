@@ -3,6 +3,10 @@ const router = express.Router();
 const animalModel = require('../../Infrastructure/Models/animalModel');
 const animalController = require('../controllers/animalController');
 
+
+router.post('/getIAObjects', animalController.getIAObjects);
+  
+
 //Getting all
 router.get('/', animalController.getAllAnimals);
 

@@ -1,9 +1,29 @@
 const productService = require('../../Application/UseCases/product/productService');
 const product = require('../../Domain/Entities/product')
 
+const omit = require('../utils/omit');
+const uploadImage = require('../utils/cloudinary/uploadImage');
+const fs = require('fs');
+const path = require('path');
 const addProduct = async (req, res) => {
   try {
     const product = req.body; // assuming user details are passed in the request body
+    const productData = omit(req.body, ['file']);
+    if (Object.keys(req.files || {}).length > 0) {
+
+      const image = req.files.file[0] || req.body.file || { path: '' };
+      const uploadedImage = await uploadImage(image.path);
+  
+      product.pic = uploadedImage ? uploadedImage.url : '';
+      console.log(product.pic);
+      console.log(product);
+      if (uploadedImage) {
+        let filePath = path.join(`${__dirname}/../../`, image.path);
+        if (filePath.includes('uploads')) {
+          fs.unlink(filePath, () => {});
+        }
+      }
+    }
     const createdProduct = await productService.addProduct(product);
     res.status(201).json(createdProduct);
   } catch (err) {

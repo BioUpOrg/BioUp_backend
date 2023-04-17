@@ -173,7 +173,7 @@ const addUser = async (req, res) => {
       let filePath = path.join(`${__dirname}/../../`, image.path);
       if (filePath.includes('uploads')) {
         fs.unlink(filePath, () => {});
-      }
+      } 
     }
   }
     await user.save();
