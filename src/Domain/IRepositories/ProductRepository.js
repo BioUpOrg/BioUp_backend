@@ -22,6 +22,17 @@ const getAll = async () => {
     throw new Error('Could not get products');
   }
 };
+const getProductUser = async (userId) => {
+  try {
+    const products = await productModel.find({user:userId});
+    console.log("userId",userId);
+    console.log(products);
+    return products.map((product) => product.toObject());
+  } catch (err) {
+    console.error(err);
+    throw new Error('Could not get products');
+  }
+};
 const getProduct = async (productId) => {
   var total = 0;
   var average = 0;
@@ -69,5 +80,5 @@ const deleteProduct = async (productId) => {
 
 
 module.exports = {
-  create,getAll,update,deleteProduct,getProduct
+  create,getAll,update,deleteProduct,getProduct,getProductUser
 };
