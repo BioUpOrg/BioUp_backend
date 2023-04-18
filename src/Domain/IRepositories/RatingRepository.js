@@ -1,7 +1,7 @@
 const Rating = require('../Entities/rating');
 const ratingModel = require('../../Infrastructure/Models/ratingModel');
 const productModel = require('../../Infrastructure/Models/productModel');
-const userModel = require('../../Infrastructure/Models/');
+const userModel = require('../../Infrastructure/Models/userModel');
 const create = async (ratingData) => {
     try {
       const rating = new Rating(ratingData);
