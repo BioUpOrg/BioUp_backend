@@ -50,6 +50,6 @@ router.get('/existEmail/:email', userController.existEmail);
 //logout
 router.post('/logout', auth, userController.logout);
 
-
+router.get('/getById/:id',userController.getUserByIdd)
 
 module.exports = router;

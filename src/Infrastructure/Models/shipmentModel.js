@@ -7,7 +7,6 @@ const shipmentSchema=new mongoose.Schema({
     shipment_status:{type:Boolean,default:false, require:false},
     shipment_items:[
         {
-            
             commande_id:{type: mongoose.Schema.Types.ObjectId, ref: 'Command'}
         }
         
