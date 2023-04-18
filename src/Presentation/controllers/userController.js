@@ -261,12 +261,21 @@ const DesactivateUserAccount = async (req, res) => {
   }
 }
 
+const getUserByIdd=async (req,res)=>{
 
+    try {
+      const user = await User.findOne({_id:req.params.id});
+      return res.status(200).send(user);
+    } catch (e) {
+      res.status(500).send({ error: e });
+    }
+  
+}
 
 
 module.exports = {
   login,logout,
   sendActivateCodeMail,verifyAccountMail,sendActivateCodeSmS,verifyAccountSms,getConnectedUser,
 sendCodeRecBySms,verifyCodeRecBySms,changePass,getUserById,getUsersList,DesactivateUserAccount,addUser,verifyIfPhoneExist,
-existEmail,existPhone
+existEmail,existPhone,getUserByIdd
 };
