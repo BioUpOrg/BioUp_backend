@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const animalSchema = new mongoose.Schema({
     name: { type: String, required: true },
     image: { type: String },
-    sex: { type: String, required: true },
+    sex: { type: String },
     birthdate: { type: Date },
     age: { type: Number },
     healthStatus: { type: String },
