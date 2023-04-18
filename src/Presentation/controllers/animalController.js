@@ -46,7 +46,6 @@ const getAllAnimals = async (req, res) => {
 };
 
 const addAnimal = async (req, res) => {
-  console.log(req.body);
   const animal = new Animal({
     name: req.body.name,
     image: req.body.image,
@@ -63,7 +62,7 @@ const addAnimal = async (req, res) => {
   });
   try {
     const newAnimal = await animal.save();
-    res.status(201).json(newAnimal);
+    return res.status(201).json(newAnimal);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
