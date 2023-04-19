@@ -35,4 +35,22 @@ const saveSignaturecontroller =async(req,res)=>{
         console.log(e,"could not save signature")
     }
 }
-module.exports={addContract,FindContractByUserID,saveSignaturecontroller}; 
+const getAllContractController=async(req,res)=>{
+    try{
+        const contracts=await contServ.getAllContracts();
+        res.status(200).send(contracts);
+    }
+    catch(e){
+        console.log(e,"could not get all contracts")
+    }
+}
+const acceptContract=async(req,res)=>{
+    try{
+        const contractid=req.params.contractid;
+        const contract=await contServ.acceptContract(contractid);
+        res.status(200).send(contract);
+    }catch(e){
+        console.log(e,"could not accept contract");
+    }
+}
+module.exports={addContract,FindContractByUserID,saveSignaturecontroller,getAllContractController,acceptContract}; 
