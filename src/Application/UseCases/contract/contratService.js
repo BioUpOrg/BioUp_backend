@@ -41,9 +41,12 @@ const getAllContracts=async()=>{
     }
 }
 const acceptContract=async(contractid)=>{
-    const update= {statuscontract:true} ;
     try{
-        const contract=await Contract.findByIdAndUpdate({_id:contractid},update,{new:true});
+        
+        const contract=await Contract.findByIdAndUpdate({_id:contractid},{new:true}).populate("transporter");
+        contract.user.role="user";
+        contract.statuscontract=true;
+        contract.save();
         return contract;
     }catch(e){
         console.log(e,"could not accept contract");
