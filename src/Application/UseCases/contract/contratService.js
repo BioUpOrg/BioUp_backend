@@ -1,6 +1,7 @@
  const { response } = require('express');
 const Contract =require('../../../Infrastructure/Models/contratModel');
 const { update } = require('../../../Infrastructure/Models/userModel');
+const User = require('../../../Infrastructure/Models/userModel');
 const addContract = async (c)=>{
     try {
         const contract = await Contract.create(c);
@@ -43,10 +44,12 @@ const getAllContracts=async()=>{
 const acceptContract=async(contractid)=>{
     try{
         
-        const contract=await Contract.findByIdAndUpdate({_id:contractid},{new:true}).populate("user");
-        contract.user.role="user";
-        contract.statuscontract=true;
-        contract.save();
+        const update={statuscontract:true}; 
+        const contract=await Contract.findOneAndUpdate({_id:contractid},update,{new:true}).populate("user");
+         const updateuserRole={role:"transporter"};
+       const user= await User.findOneAndUpdate({_id:contract.user},updateuserRole,{new:true}); 
+       await contract.save();
+       await user.save();
         return contract;
     }catch(e){
         console.log(e,"could not accept contract");

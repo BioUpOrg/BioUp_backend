@@ -49,6 +49,7 @@ const acceptContract=async(req,res)=>{
         const contractid=req.params.contractid;
         const contract=await contServ.acceptContract(contractid);
         res.status(200).send(contract);
+        console.log("accepted contract and role modified")
     }catch(e){
         console.log(e,"could not accept contract");
     }
