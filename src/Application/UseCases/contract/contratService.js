@@ -31,4 +31,23 @@ const saveSignature=async(signature,userid)=>{
         console.log(e,"could not save signature")
     }
 }
-module.exports={addContract,FindContractByUserID,saveSignature};
+const getAllContracts=async()=>{
+    try{
+        const contracts=await Contract.find().populate("user");
+        return contracts;
+    }
+    catch(e){
+        console.log(e,"could not get all contracts")
+    }
+}
+const acceptContract=async(contractid)=>{
+    const update= {statuscontract:true} ;
+    try{
+        const contract=await Contract.findByIdAndUpdate({_id:contractid},update,{new:true});
+        return contract;
+    }catch(e){
+        console.log(e,"could not accept contract");
+    }
+
+}
+module.exports={addContract,FindContractByUserID,saveSignature,getAllContracts,acceptContract};
