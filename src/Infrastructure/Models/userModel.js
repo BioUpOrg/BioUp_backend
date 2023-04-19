@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   statusActivation:{type:Boolean,default:false},
   codeRecuperation: {type:String, default:''},
   isBlocked: { type: Boolean, default: false },
-  adress:{type:String,required:true},
+  adress:{type:String},
   uid: {type: String},
   gender: {type : String} ,
   pic:{type : String} ,

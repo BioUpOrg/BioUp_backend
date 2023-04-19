@@ -7,12 +7,12 @@ const create = async (ratingData) => {
       const rating = new Rating(ratingData);
       console.log("ratingData",ratingData)
       const user = await ratingModel.findOne({user:ratingData.user,product:ratingData.product});
+      var createdRating ="";
       if(user){
-      
-        const createdRating = await ratingModel.create(rating);
+         createdRating = await ratingModel.findOneAndReplace({user:ratingData.user,product:ratingData.product},rating);
       }
         else{
-            const createdRating = await ratingModel.findOneAndReplace({user:ratingData.user,product:ratingData.product},rating);
+         createdRating = await ratingModel.create(rating);
         }
         return createdRating.toObject();
     } catch (err) {
