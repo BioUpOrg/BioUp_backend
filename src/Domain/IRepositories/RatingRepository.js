@@ -1,11 +1,19 @@
 const Rating = require('../Entities/rating');
 const ratingModel = require('../../Infrastructure/Models/ratingModel');
 const productModel = require('../../Infrastructure/Models/productModel');
+const userModel = require('../../Infrastructure/Models/userModel');
 const create = async (ratingData) => {
     try {
       const rating = new Rating(ratingData);
       console.log("ratingData",ratingData)
-        const createdRating = await ratingModel.create(rating);
+      const user = await ratingModel.findOne({user:ratingData.user,product:ratingData.product});
+      var createdRating ="";
+      if(user){
+         createdRating = await ratingModel.findOneAndReplace({user:ratingData.user,product:ratingData.product},rating);
+      }
+        else{
+         createdRating = await ratingModel.create(rating);
+        }
         return createdRating.toObject();
     } catch (err) {
         console.error(err);
