@@ -18,11 +18,8 @@ const contractModel=new mongoose.Schema({
            
 },
     statuscontract:{type:Boolean,default:false, require:false},
-<<<<<<< Updated upstream
     signature :{type:String,default:"",require:false}
-=======
-    signature :{type:String,default:'',require:false}
->>>>>>> Stashed changes
+
 
 }
 
