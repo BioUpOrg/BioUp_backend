@@ -52,7 +52,7 @@ const download = async (req, res) => {
     console.log(jsonproducts);
     try {
         const csv = json2csv.parse(jsonproducts)
-        res.attachment('data.csv')
+        res.attachment('products.csv')
         res.status(200).send(csv)
     } catch (error) {
         console.log('error:', error.message)
