@@ -1,5 +1,8 @@
 const Shipment= require('../../../Infrastructure/Models/shipmentModel'); 
 const Commande=require('../../../Infrastructure/Models/commandModel');
+const mailBeginShipment =require ('../../../Presentation/utils/mailBeginShipment');
+const User = require('../../../Infrastructure/Models/userModel');
+const getSmsToken = require('../../../Presentation/middlwares/getSmsToken');
 const addShipment = async (s)=>{
     // Add shipment
     try{
@@ -9,11 +12,47 @@ const addShipment = async (s)=>{
             const idcommande=c.commande_id;
             await Commande.findOneAndUpdate({_id:idcommande},updatestatus,{new:true}).then((res)=>{
                 console.log("status commande updated ", idcommande +"to"+ res);
-
+                   
             })
         });
             console.log("all commandes updated")
-            const shipment=  await Shipment.create(s); 
+            s.shipment_track_id="STID"+s.shipment_agent+"STID";
+            
+            const shipment=  await Shipment.create(s).then((res)=>{
+                if(res){
+                      commandes.forEach(async (order) => {
+                        const idc=order.commande_id;
+                        await Commande.findOne({_id:idc}).then(async(res)=>{
+                            if(res){
+                              const   buyersearched=res.buyer; 
+                                const buyer =await  User.findById({_id:buyersearched});
+                            if(buyer){
+                                if (buyer.email){
+                                    console.log("buyer contact ",buyer.email)
+                                    await  mailBeginShipment(buyer.email,s.shipment_track_id);
+                                    
+                                }
+                                else if (buyer.phone){
+                                    console.log("buyer contact ",buyer.phone);
+                                    const clientId = 'SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6NFQwdmoxVVlZVnc0M0FmOA==';
+                                    const context_shipment='Your Order has been created and soon it will be shipped soon , you can track your order with this id : ';
+                                    await getSmsToken(clientId,buyer.phone,s.shipment_track_id,context_shipment);                                }
+                            }else{
+                                console.log("could not find user to send the tracking id  ");
+                            }
+
+                                    
+                            }else{
+                               console.log("could not find commande to send mail");   
+                            }
+                        });
+                     
+                       
+                      });
+                }else{
+                    console.log("could not create shipment ");
+                }
+            }); 
             return shipment;
         }
            
