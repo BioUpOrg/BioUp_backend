@@ -215,25 +215,38 @@ len(trained_movie_embeddings) # unique movie factor weights
 
 from sklearn.cluster import KMeans
 # Fit the clusters based on the movie weights
-kmeans = KMeans(n_clusters=8, random_state=0).fit(trained_movie_embeddings)
+kmeans = KMeans(n_clusters=10, random_state=0).fit(trained_movie_embeddings)
 
 
 # In[136]:
 
 products = []
-for cluster in range(5):
-  print("Cluster #{}".format(cluster))
+for cluster in range(8):
+  case = {'cluster':format(cluster)}
+  products.append(case)
+
   movs = []
+  print("Cluster #{}".format(cluster))
   for movidx in np.where(kmeans.labels_ == cluster)[0]:
     movid = train_set.idx2movieid[movidx]
     rat_count = ratings_df.loc[ratings_df['productId']==movid].count()[0]
-    movs.append((movie_names[movid], rat_count))
+    if movid in movie_names:
+      movs.append((movid, rat_count))
+  c = 0
   for mov in sorted(movs, key=lambda tup: tup[1], reverse=True)[:10]:
+    c = c + 1
     print("\t", mov[0])
-    case = {'cluster':format(cluster), 'product':mov[0] }
-    products.append(case)
-print(products)
+    stringc = str(c)
+    case.update({'product'+stringc:mov[0]})
 
+
+
+import json
+
+jsonString = json.dumps(products)
+jsonFile = open("C:/Users/user/data.json", "w")
+jsonFile.write(jsonString)
+jsonFile.close()
 
 
 # In[ ]:
