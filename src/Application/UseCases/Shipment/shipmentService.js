@@ -73,4 +73,19 @@ const getMyShipment= async ( id )=>{
     }
   
 }
-module.exports={addShipment,getMyShipment};
+
+const updateMylocation= async(position,agent_id)=>{
+   const u={position:position}
+console.log('position',position)
+console.log(agent_id)
+    try{
+       
+        const user= await User.findOneAndUpdate({_id:agent_id},u,{new:true});
+        return user;
+
+    }catch(e){
+        console.log(e,"could not update location");
+    }
+
+}
+module.exports={addShipment,getMyShipment,updateMylocation};

@@ -36,6 +36,17 @@ const getMyshipment=async (req,res)=>{
         console.log(error,"could not get my shipment ")
     }
 }
+const updateMylocation=async(req,res)=>{
+    try{
+        const agent_id=req.params.agent_id;
+          const position=req.body.position
+        const user=await shipmentServ.updateMylocation(position,agent_id);
+        res.status(200).send(user);
+        console.log("location updated")
+    }catch(e){
+        console.log(e,"could not update location")
+    }
+}
 module.exports={
-    findCommandesNotDelivered,addShipment,getMyshipment
+    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation
 }

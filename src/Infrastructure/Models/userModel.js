@@ -23,7 +23,10 @@ const userSchema = new mongoose.Schema({
   gender: {type : String} ,
   pic:{type : String} ,
   token:{type : String} ,
-
+  position: {
+    lat: { type: Number, default: 0 },
+    lng: { type: Number, default: 0 }
+  },
 
 
   tokens: [
