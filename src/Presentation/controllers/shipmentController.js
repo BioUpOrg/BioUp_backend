@@ -47,6 +47,18 @@ const updateMylocation=async(req,res)=>{
         console.log(e,"could not update location")
     }
 }
+const getMyOderLocation=async(req,res)=>{
+    try{
+        const trackid=req.params.trackid;
+        console.log("trackidcontroller",trackid)
+        const myorders= await shipmentServ.getMyOrderLocation(trackid);
+        res.status(200).send(myorders);
+        console.log(myorders);
+    }catch(e){
+        console.log(e,"could not get my order location")
+    }
+}
+
 module.exports={
-    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation
+    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation,getMyOderLocation
 }
