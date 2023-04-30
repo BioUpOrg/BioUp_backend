@@ -88,4 +88,27 @@ console.log(agent_id)
     }
 
 }
-module.exports={addShipment,getMyShipment,updateMylocation};
+const getMyOrderLocation = async (trackid) => {
+    try {
+      const myOrder = await Shipment.findOne({ shipment_track_id: trackid });
+  
+      if (!myOrder) {
+        return "Order not found";
+      }
+  
+      const s = myOrder.shipment_agent;
+      const agentInfo = await User.findById({_id:s});
+  
+      if (!agentInfo) {
+        return "Agent not found";
+      }
+  
+      return agentInfo.position;
+  
+    } catch (e) {
+      console.log(e);
+      return "Could not get order location";
+    }
+  }
+  
+module.exports={addShipment,getMyShipment,updateMylocation,getMyOrderLocation};
