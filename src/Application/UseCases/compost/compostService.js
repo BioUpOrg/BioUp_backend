@@ -73,6 +73,20 @@ async function getTopRatedComposts(limit) {
   }
 };
 
+async function getRecentlyAddedComposts(limit) {
+  try {
+    const composts = await Compost
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+
+    return composts;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+
 module.exports = {
   getAllComposts,
   getCompostById,
@@ -80,5 +94,6 @@ module.exports = {
   updateCompost,
   deleteCompost,
   getSellerComposts,
-  getTopRatedComposts
+  getTopRatedComposts,
+  getRecentlyAddedComposts
 };
