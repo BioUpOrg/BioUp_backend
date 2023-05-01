@@ -15,6 +15,9 @@ router.get('/topRated', compostsController.getTopRatedComposts);
 //Get recently added composts
 router.get('/recentlyAdded', compostsController.getRecentlyAddedComposts);
 
+//Get recently added composts
+router.get('/topSelled', compostsController.getTopSelledComposts);
+
 //Get a compost details by id
 router.get('/:id', compostsController.getCompostById);
 

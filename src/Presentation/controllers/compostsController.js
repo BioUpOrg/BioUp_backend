@@ -110,7 +110,17 @@ exports.getTopRatedComposts = async (req, res) => {
 exports.getRecentlyAddedComposts = async (req, res) => {
   try {
     const limit = req.query.limit || 5;
-    const composts = await compostService.getRecentlyAddedComposts();
+    const composts = await compostService.getRecentlyAddedComposts(limit);
+    res.status(200).json(composts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getTopSelledComposts = async (req, res) => {
+  try {
+    const limit = req.query.limit || 5;
+    const composts = await compostService.getTopSelledComposts(limit);
     res.status(200).json(composts);
   } catch (error) {
     res.status(500).json({ error: error.message });
