@@ -92,7 +92,7 @@ const verifyActivationCodeMail = async (token)=>{
   const activationcode =utils.getActivationCode(); 
   const update= {activationCode:activationcode};
   const user= await User.findOneAndUpdate({phone:phone},update,{new:true});
-  const clientId = 'SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6VGo0S1dRMUQ2aWlDWXZFSw==';
+  const clientId = 'SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6NFQwdmoxVVlZVnc0M0FmOA==';
   const context_activation_via_sms='please use this code in bio up  website to activate your account ';
   await getSmsToken(clientId,phone,activationcode,context_activation_via_sms);
   return user;
@@ -106,7 +106,7 @@ const verifyActivationCodeMail = async (token)=>{
  const coderecp= await utils.getActivationCode();
 const update={codeRecuperation:coderecp};
  const user = await User.findOneAndUpdate({phone:number},update,{new:true});
-    const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6VGo0S1dRMUQ2aWlDWXZFSw==';
+    const clientId ='SkRqc3REeEVHQ09UdHFFUlZQS0kwVEdZMjNvalhJTHk6NFQwdmoxVVlZVnc0M0FmOA==';
     const context_activation_via_sms='please use this code in bio up  website to Create a new Password  ';
        getSmsToken(clientId,number,coderecp,context_activation_via_sms);
        user.save();

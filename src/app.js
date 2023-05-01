@@ -22,7 +22,7 @@ var usersRouter = require('./Presentation/routes/users');
 var contractroutes=require('./Presentation/routes/contractroutes');
 var productsRouter = require('./Presentation/routes/products');
 var googleRouter = require('./Presentation/routes/googleAuth');
-
+var shipmentroute=require('./Presentation/routes/shipmentroute');
 var fbRouter = require('./Presentation/routes/fb');
 var forgetPasswordMail = require('./Presentation/routes/forgetPasswordMail');
 
@@ -33,6 +33,7 @@ var ratingRouter = require('./Presentation/routes/rating');
 var compostsRouter = require('./Presentation/routes/composts');
 var commandsRouter = require('./Presentation/routes/commands');
 var shipmentroute=require('./Presentation/routes/shipmentroute');
+
 var cookieSession = require('cookie-session');
 const { json } = require( "body-parser");
 
@@ -47,7 +48,6 @@ app.use(
 );
 app.use(cors({
   origin: 'http://localhost:4000',
-
   methods: ['GET', 'POST', 'PUT', 'PATCH' , 'DELETE'],
   credentials: true 
 }));
@@ -105,6 +105,7 @@ app.use('/rating',ratingRouter)
 app.use('/composts',compostsRouter)
 app.use('/commands',commandsRouter)
 app.use('/shipment',shipmentroute);
+
 
 
 
