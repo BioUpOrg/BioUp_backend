@@ -1,4 +1,5 @@
 const Compost = require('../../../Infrastructure/Models/compostModel');
+const Command = require('../../../Infrastructure/Models/commandModel');
 
 async function getAllComposts() {
   try {
@@ -86,6 +87,42 @@ async function getRecentlyAddedComposts(limit) {
   }
 }
 
+async function getTopSelledComposts(limit) {
+  try {
+    const topComposts = await Command.aggregate([
+      { $unwind: "$products" },
+      { $match: { "products.type": "compost" } },
+      { $group: { _id: "$products.product", totalQuantity: { $sum: "$products.quantity" } } },
+      { $sort: { totalQuantity: -1 } },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "composts",
+          localField: "_id",
+          foreignField: "_id",
+          as: "compost"
+        }
+      },
+      { $unwind: "$compost" },
+      {
+        $project: {
+          _id: "$compost._id",
+          name: "$compost.name",
+          unitPrice: "$compost.unitPrice",
+          discountOffered: "$compost.discountOffered",
+          quantityWeight: "$compost.quantityWeight",
+          rating: "$compost.rating",
+          description: "$compost.description",
+          image: "$compost.image",
+          totalQuantity: 1
+        }
+      }
+    ]);
+    return topComposts;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
 
 module.exports = {
   getAllComposts,
@@ -95,5 +132,6 @@ module.exports = {
   deleteCompost,
   getSellerComposts,
   getTopRatedComposts,
-  getRecentlyAddedComposts
+  getRecentlyAddedComposts,
+  getTopSelledComposts
 };
