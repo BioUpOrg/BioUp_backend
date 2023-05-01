@@ -9,8 +9,11 @@ router.get('/all', compostsController.getAllComposts);
 //Get seller composts
 router.get('/GetSellerComposts',auth, compostsController.getSellerComposts);
 
-//Get all composts
+//Get top rated composts
 router.get('/topRated', compostsController.getTopRatedComposts);
+
+//Get recently added composts
+router.get('/recentlyAdded', compostsController.getRecentlyAddedComposts);
 
 //Get a compost details by id
 router.get('/:id', compostsController.getCompostById);
