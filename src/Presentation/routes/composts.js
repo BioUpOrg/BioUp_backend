@@ -4,10 +4,13 @@ const compostsController = require('../controllers/compostsController');
 const auth = require('../middlwares/auth');
 
 //Get all composts
-router.get('/', compostsController.getAllComposts);
+router.get('/all', compostsController.getAllComposts);
 
 //Get seller composts
 router.get('/GetSellerComposts',auth, compostsController.getSellerComposts);
+
+//Get all composts
+router.get('/topRated', compostsController.getTopRatedComposts);
 
 //Get a compost details by id
 router.get('/:id', compostsController.getCompostById);
