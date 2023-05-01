@@ -16,7 +16,7 @@ const addShipment = async (s)=>{
             })
         });
             console.log("all commandes updated")
-            s.shipment_track_id="STID"+s.shipment_agent+"STID";
+            s.shipment_track_id=s.shipment_agent;
             
             const shipment=  await Shipment.create(s).then((res)=>{
                 if(res){
@@ -66,7 +66,7 @@ const addShipment = async (s)=>{
 const getMyShipment= async ( id )=>{
 
     try{
-        const mymission= Shipment.findOne({shipment_agent:id});
+        const mymission= Shipment.findOne({shipment_agent:id,shipment_status:false});
         return mymission;
     }catch(e){
         console.log(e,"could not get my shipment")
@@ -110,5 +110,20 @@ const getMyOrderLocation = async (trackid) => {
       return "Could not get order location";
     }
   }
+   const makeEndOfamission=async(idmission)=>{
+    
+    try{
+        const mission =await Shipment.findById({_id:idmission});
+        if(mission){
+            mission.shipment_status=true; 
+            mission.save();
+            return mission;
+        }
+            
+    }catch(e){
+     console.log(e);
+     return "could not make end of shipment"
+    }
+  }
   
-module.exports={addShipment,getMyShipment,updateMylocation,getMyOrderLocation};
+module.exports={addShipment,getMyShipment,updateMylocation,getMyOrderLocation,makeEndOfamission};

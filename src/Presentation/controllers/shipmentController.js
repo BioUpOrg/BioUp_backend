@@ -58,7 +58,17 @@ const getMyOderLocation=async(req,res)=>{
         console.log(e,"could not get my order location")
     }
 }
-
+const makeEndOfamission =async(req,res)=>{
+    try{
+        const idmission=req.params.idmission; 
+        console.log("idmission:"+idmission);
+        const endmission=await shipmentServ.makeEndOfamission(idmission);
+        res.status(200).send(endmission);
+        console.log(endmission);
+    }catch(e){
+        console.log(e,"could not make end of the shipment ");
+    }
+}
 module.exports={
-    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation,getMyOderLocation
+    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation,getMyOderLocation,makeEndOfamission
 }
