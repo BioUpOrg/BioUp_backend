@@ -6,7 +6,7 @@ const ratingSchema = new mongoose.Schema({
     updatedAt: { type: Date, default: Date.now },
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    
+    compost: { type: mongoose.Schema.Types.ObjectId, ref: 'Compost' },
  
 });
 

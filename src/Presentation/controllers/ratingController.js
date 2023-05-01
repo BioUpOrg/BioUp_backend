@@ -1,5 +1,6 @@
 const ratingService = require('../../Application/UseCases/rating/ratingService');
 const rating = require('../../Domain/Entities/rating')
+const Compost = require('../../Infrastructure/Models/compostModel');
 
 const addRating = async (req, res) => {
     try{
@@ -61,7 +62,37 @@ const getRating = async (req, res) => {
         
 }
 
+
+//compost Rating
+const rateCompost = async (req, res) => {
+    try{
+        const compostId = req.params.idCompost;
+        const userId = req.user._id;
+        const ratingValue = parseInt(req.params.ratingValue);
+        
+        const compost = await Compost.findById(compostId);
+    
+        if (!compost) {
+        return res.status(404).json({ message: 'Compost not found' });
+        }
+
+        // check if the user is the seller of the compost
+        if (compost._idSeller.equals(userId)) {
+        return res.status(403).json({ message: 'You cannot rate your own compost' });
+        }
+
+        const { createdRating, updatedCompost } = await ratingService.rateCompost(compostId, userId, ratingValue);
+    
+        res.status(201).json({ createdRating, updatedCompost });
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({message: 'Internal Server Error rating'});
+    }
+};
+
+
 module.exports = {
-    addRating,getRatings,updateRating,deleteRating,getRating
+    addRating,getRatings,updateRating,deleteRating,getRating, rateCompost
 };
 

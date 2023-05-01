@@ -62,6 +62,9 @@ const compostSchema = new mongoose.Schema({
   },
   _idSeller:{
     type: mongoose.Schema.Types.ObjectId
+  },
+  rating:{
+    type: Number
   }
 }, {
   timestamps: true,
