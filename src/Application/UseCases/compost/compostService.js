@@ -59,6 +59,19 @@ async function getSellerComposts(idSeller) {
   }
 }
 
+async function getTopRatedComposts(limit) {
+  try {
+    const topComposts = await Compost
+      .find()
+      .sort({ rating: -1 })
+      .limit(limit)
+      //.populate('_idSeller', '-password')
+
+    return topComposts;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   getAllComposts,
@@ -66,5 +79,6 @@ module.exports = {
   addCompost,
   updateCompost,
   deleteCompost,
-  getSellerComposts
+  getSellerComposts,
+  getTopRatedComposts
 };
