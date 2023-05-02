@@ -4,6 +4,7 @@ const contractModel=new mongoose.Schema({
     typeContract :{ type:String , require:true},
     dateContract :{ type:Date , default :Date.now},
     user:{ type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    cin:{type:Number,required:true},
     salary:{type:Number ,require:false },
     vehicle:{  
    
