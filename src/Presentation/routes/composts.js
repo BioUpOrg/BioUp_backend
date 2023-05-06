@@ -30,5 +30,7 @@ router.put('/:id', compostsController.updateCompost);
 //delete a compost by id
 router.delete('/:id', compostsController.deleteCompost);
 
+//recommend composts based on soil type
+router.get('/recommend/:soilType', compostsController.getRecommendedComposts);
 
 module.exports = router;

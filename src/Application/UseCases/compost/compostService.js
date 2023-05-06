@@ -124,6 +124,37 @@ async function getTopSelledComposts(limit) {
   }
 }
 
+async function getRecommendedComposts(soilType) {
+  try {
+    // Retrieve all composts from the database
+    const allComposts = await Compost.find({});
+
+    // Define the list of nutrients for each soil type
+    const soilNutrients = {
+      'Black_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Magnesium', 'Sulfur', 'Molybdenum'],
+      'Cinder_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur'],
+      'Laterite_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc'],
+      'Peat_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc'],
+      'Yellow_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc']
+    };
+
+    // Find the list of missing nutrients for the given soil type
+    const missingNutrients = soilNutrients[soilType];
+
+    // Filter the composts that contain all the missing nutrients
+    const recommendedComposts = allComposts.filter(compost => {
+      const compostNutrients = compost.nutrientContent.map(nutrient => nutrient.name.toLowerCase());
+      const missingNutrientsLowerCase = missingNutrients.map(nutrient => nutrient.toLowerCase());
+      return missingNutrientsLowerCase.every(nutrient => compostNutrients.includes(nutrient));
+    });
+    
+
+    return recommendedComposts;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 module.exports = {
   getAllComposts,
   getCompostById,
@@ -133,5 +164,6 @@ module.exports = {
   getSellerComposts,
   getTopRatedComposts,
   getRecentlyAddedComposts,
-  getTopSelledComposts
+  getTopSelledComposts,
+  getRecommendedComposts
 };

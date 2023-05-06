@@ -126,3 +126,14 @@ exports.getTopSelledComposts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+exports.getRecommendedComposts = async (req, res) => {
+  try {
+    const soilType = req.params.soilType;
+    const recommendedComposts = await compostService.getRecommendedComposts(soilType);
+    res.status(200).json(recommendedComposts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
