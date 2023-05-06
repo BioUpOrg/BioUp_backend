@@ -125,5 +125,17 @@ const getMyOrderLocation = async (trackid) => {
      return "could not make end of shipment"
     }
   }
+  const getAllshipments =async ()=>{
+        try{
+            const shipments = await Shipment.find().populate("shipment_agent")
+            .populate("shipment_items.commande_id")
+            .exec();
+
+            return shipments;
+        }catch(e){
+            console.log(e);
+            return "could not get all shipments";
+        }
+  }
   
-module.exports={addShipment,getMyShipment,updateMylocation,getMyOrderLocation,makeEndOfamission};
+module.exports={addShipment,getMyShipment,updateMylocation,getMyOrderLocation,makeEndOfamission,getAllshipments};

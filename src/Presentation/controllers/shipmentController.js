@@ -69,6 +69,16 @@ const makeEndOfamission =async(req,res)=>{
         console.log(e,"could not make end of the shipment ");
     }
 }
+
+const getAllshipments=async (req,res)=>{
+    try{
+        const shipments= await shipmentServ.getAllshipments();
+        res.status(200).send(shipments);
+        console.log(shipments);
+    }catch(e){
+        console.log(e,"could not get all shipments");
+    }
+}
 module.exports={
-    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation,getMyOderLocation,makeEndOfamission
+    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation,getMyOderLocation,makeEndOfamission,getAllshipments
 }
