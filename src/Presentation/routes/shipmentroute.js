@@ -9,4 +9,5 @@ router.get('/MyMission/:id',shipmentController.getMyshipment);
 router.put('/updateMylocation/:agent_id',shipmentController.updateMylocation);
 router.get('/getMyOrderLocation/:trackid',shipmentController.getMyOderLocation);
 router.put('/makeEndOfMission/:idmission',shipmentController.makeEndOfamission);
+router.get('/getAllShipment',shipmentController.getAllshipments);
 module.exports = router;
