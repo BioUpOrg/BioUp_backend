@@ -137,5 +137,15 @@ const getMyOrderLocation = async (trackid) => {
             return "could not get all shipments";
         }
   }
+
+  const deleteshipments =async(idshipment)=>{
+    try{
+        const shipments = await Shipment.deleteOne({_id:idshipment});
+        return shipments;
+    }catch(e){
+        console.log(e);
+        return "could not delete shipment";
+    }
+  }
   
-module.exports={addShipment,getMyShipment,updateMylocation,getMyOrderLocation,makeEndOfamission,getAllshipments};
+module.exports={addShipment,getMyShipment,updateMylocation,getMyOrderLocation,makeEndOfamission,getAllshipments,deleteshipments};

@@ -79,6 +79,15 @@ const getAllshipments=async (req,res)=>{
         console.log(e,"could not get all shipments");
     }
 }
+const deleteshipmentadmin =async (req,res)=>{
+    try{
+        const shipment=await shipmentServ.deleteshipments(req.params.idshipment);
+        res.status(200).send(shipment);
+        console.log(shipment);
+    }catch(e){
+        console.log(e,"could not delete shipment");
+    }
+}
 module.exports={
-    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation,getMyOderLocation,makeEndOfamission,getAllshipments
+    findCommandesNotDelivered,addShipment,getMyshipment,updateMylocation,getMyOderLocation,makeEndOfamission,getAllshipments,deleteshipmentadmin
 }
