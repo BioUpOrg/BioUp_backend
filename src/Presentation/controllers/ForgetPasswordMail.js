@@ -1,139 +1,128 @@
-const compostService = require("../../Application/UseCases/compost/compostService");
-const Compost = require("../../Infrastructure/Models/compostModel");
-const omit = require("../../Presentation/utils/omit");
-const uploadImage = require("../../Presentation/utils/cloudinary/uploadImage");
-const fs = require("fs");
-const path = require("path");
+const User = require('../../Infrastructure/Models/userModel');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const { nextTick } = require('process');
 
-exports.getAllComposts = async (req, res) => {
-  try {
-    const composts = await compostService.getAllComposts();
-    res.status(200).json(composts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+// Create a nodemailer   
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'habibfiras.hadroug@esprit.tn',
+      pass: 'habib9999*'
+    }
+  });
+  //
+  //
+  // Generate a random verification code
+  const codeRecuperation = crypto.randomBytes(3).toString('hex'); // 3 bytes will generate a 6-digit hex code
+   
+  // Define the email content
+  
+  
+  // Send the email
+  const sendps = async (req, res) => {
+try{
+  const mailOptions = {
+    from: 'habibfiras.hadroug@esprit.tn',
+    to: req.body.email,
+    subject: 'Password reset verification code',
+    text: `Your password reset verification code is: ${codeRecuperation}`
+  };
+  console.log(req.body.email)
+  const send = transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+      const update ={codeRecuperation:codeRecuperation}
+      const user=User.findOneAndUpdate({email:req.body.email},update,{new : true}
+        
+        
+        )
+        .then(resp => {
+          if (!resp) {
+           // console.log(err);
+            res.send("err");
+          } else {
+            res.send("ok");
+          }
+        }
+        )
+
+
+    }
+  });
+}catch(err){
+  console.log(err)
+
+
+}
 };
 
-exports.getCompostById = async (req, res) => {
-  try {
-    const compost = await compostService.getCompostById(req.params.id);
-    res.status(200).json(compost);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+
+
+const verifps= async (req, res,next) => {
+  const user = await User.findOne({email:req.body.email}).then((user,err) => {
+    if (err) {
+      console.log(err);
+    } else {
+       if(user.codeRecuperation==req.body.codeRecuperation){
+        res.send("ok");
+        user.codeRecuperation = "1";
+    user.save();
+    // Set the user object on the request object for later use
+    req.user = user;
+
+
+  }else{
+    res.send("err");
   }
-};
+    }
 
-exports.addCompost = async (req, res) => {
-  try {
-    const compostData = omit(req.body, ["file"]);
-    compostData._idSeller = req.user._id;
+ 
 
-    const compost = new Compost(compostData);
-    if (Object.keys(req.files || {}).length > 0) {
-      const image = req.files.file[0] || req.body.file || { path: "" };
-      const uploadedImage = await uploadImage(image.path);
-      compost.image = uploadedImage ? uploadedImage.url : "";
-      if (uploadedImage) {
-        let filePath = path.join(`${__dirname}/../../`, image.path);
-        if (filePath.includes("uploads")) {
-          fs.unlink(filePath, () => {});
+});
+}
+
+const changeps= async (req, res) => {
+  try{
+    const user = await User.findOne({email:req.body.email}).then((user,err) => {
+      if(user){
+        if(user.codeRecuperation === "1"){
+          user.password=req.body.password;
+          user.codeRecuperation = "";
+          user.save()
+          res.send('changed')
+
+        }
+        else{
+          res.send('code incorrect')
         }
       }
-    }
-    const composte = await compost.save();
-    res.status(201).json(composte);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-exports.updateCompost = async (req, res) => {
-  try {
-    const compostData = omit(req.body, ["file"]);
-
-    if (Object.keys(req.files || {}).length > 0) {
-      const image = req.files.file[0] || req.body.file || { path: "" };
-      const uploadedImage = await uploadImage(image.path);
-      compostData.image = uploadedImage ? uploadedImage.url : "";
-      // if (compostData.image.startsWith("blob:")){
-      //   compostData.image.substring(5)
-      // }
-      if (uploadedImage) {
-        let filePath = path.join(`${__dirname}/../../`, image.path);
-        if (filePath.includes("uploads")) {
-          fs.unlink(filePath, () => {});
-        }
+      else{
+        res.send('user not found');
       }
-    }
-
-    const updatedCompost = await Compost.findByIdAndUpdate(
-      req.params.id,
-      compostData,
-      { new: true }
-    );
-    res.status(200).json(updatedCompost);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+     
+  
+      
+    });
   }
-};
-
-exports.deleteCompost = async (req, res) => {
-  try {
-    const compost = await compostService.deleteCompost(req.params.id);
-    res.status(200).json(compost);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  catch(err){
+    console.log("err");
   }
-};
+ 
 
 
-exports.getSellerComposts = async (req, res) => {
-  try {
-    const idSeller = req.user._id;
-    const composts = await compostService.getSellerComposts(idSeller);
-    res.status(200).json(composts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
 
-exports.getTopRatedComposts = async (req, res) => {
-  try {
-    const limit = req.query.limit || 5;
-    const topComposts = await compostService.getTopRatedComposts(limit);
-    res.status(200).json(topComposts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-exports.getRecentlyAddedComposts = async (req, res) => {
-  try {
-    const limit = req.query.limit || 5;
-    const composts = await compostService.getRecentlyAddedComposts(limit);
-    res.status(200).json(composts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-exports.getTopSelledComposts = async (req, res) => {
-  try {
-    const limit = req.query.limit || 5;
-    const composts = await compostService.getTopSelledComposts(limit);
-    res.status(200).json(composts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+}
 
 
-exports.getRecommendedComposts = async (req, res) => {
-  try {
-    const soilType = req.params.soilType;
-    const recommendedComposts = await compostService.getRecommendedComposts(soilType);
-    res.status(200).json(recommendedComposts);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+
+
+
+
+  module.exports = {
+    sendps,verifps,changeps
+  
+  };
+  
