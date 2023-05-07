@@ -9,7 +9,7 @@ const compostsRouter = require('./src/Presentation/routes/composts');
 const usersRouter = require('./src/Presentation/routes/users');
 const contractroutes=require('./src/Presentation/routes/contractroutes');
 const productsRouter = require('./src/Presentation/routes/products');
-// const googleRouter = require('./src/Presentation/routes/googleAuth');
+const googleRouter = require('./src/Presentation/routes/googleAuth');
 const shipmentroute=require('./src/Presentation/routes/shipmentroute');
 // const fbRouter = require('./src/Presentation/routes/fb');
 // const forgetPasswordMail = require('./src/Presentation/routes/forgetPasswordMail');
@@ -90,7 +90,7 @@ mongoose.connect(
 app.use("/composts", compostsRouter);
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
-// app.use('/google', googleRouter);
+app.use('/google', googleRouter);
 // app.use('/forget', forgetPasswordMail)
 // app.use('/fb', fbRouter);
 app.use('/contract',contractroutes);
