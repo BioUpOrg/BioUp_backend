@@ -1,6 +1,6 @@
 const User = require('../../Infrastructure/Models/userModel');
 const nodemailer = require('nodemailer');
-const crypto = require('crypto');
+// const crypto = require('crypto');
 const { nextTick } = require('process');
 
 // Create a nodemailer   
@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
   //
   //
   // Generate a random verification code
-  const codeRecuperation = crypto.randomBytes(3).toString('hex'); // 3 bytes will generate a 6-digit hex code
+  // const codeRecuperation = crypto.randomBytes(3).toString('hex'); 
    
   // Define the email content
   
