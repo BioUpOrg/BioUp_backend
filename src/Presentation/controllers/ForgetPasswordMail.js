@@ -1,16 +1,16 @@
 const User = require('../../Infrastructure/Models/userModel');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 // const crypto = require('crypto');
-const { nextTick } = require('process');
+// const { nextTick } = require('process');
 
 // Create a nodemailer   
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'habibfiras.hadroug@esprit.tn',
-      pass: 'habib9999*'
-    }
-  });
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//       user: 'habibfiras.hadroug@esprit.tn',
+//       pass: 'habib9999*'
+//     }
+//   });
   //
   //
   // Generate a random verification code
