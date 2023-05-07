@@ -22,11 +22,11 @@ const commandsRouter = require('./src/Presentation/routes/commands');
 
 
 const app = express();
-// const multer = require('multer');
+const multer = require('multer');
 const passport = require('passport'); //
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser')
-require('./Presentation/middlwares/passport');//
+// require('./Presentation/middlwares/passport');
 
 const cors = require('cors');
 app.use(cors({
@@ -39,14 +39,14 @@ app.use(cors({
 
 const { json } = require( "body-parser");
 
-// app.use(
-//   multer({
-//     limits: { fieldSize: 100 * 1024 * 1024 },
-//   }).fields([
-//     { name: 'file', maxCount: 1 },
-//     { name: 'video', maxCount: 1 },
-//   ])
-// );
+app.use(
+  multer({
+    limits: { fieldSize: 100 * 1024 * 1024 },
+  }).fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'video', maxCount: 1 },
+  ])
+);
 
 
 
