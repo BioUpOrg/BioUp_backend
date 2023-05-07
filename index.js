@@ -25,7 +25,7 @@ const app = express();
 // const multer = require('multer');
 const passport = require('passport'); //
 const cookieSession = require('cookie-session');
-require('./Presentation/middlwares/passport');//
+// require('./Presentation/middlwares/passport');//
 
 const cors = require('cors');
 app.use(cors({
