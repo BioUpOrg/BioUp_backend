@@ -23,9 +23,9 @@ const commandsRouter = require('./src/Presentation/routes/commands');
 
 const app = express();
 // const multer = require('multer');
-const passport = require('passport'); //
+// const passport = require('passport'); //
 const cookieSession = require('cookie-session');
-require('./Presentation/middlwares/passport');//
+// require('./Presentation/middlwares/passport');//
 
 const cors = require('cors');
 app.use(cors({
@@ -63,11 +63,11 @@ app.set("view engine","ejs")
 const session = require('express-session')
 
 
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));//
+// app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));//
 
-app.use(passport.initialize());//
-app.use(passport.session()); //
-app.use(cookieParser());//
+// app.use(passport.initialize());//
+// app.use(passport.session()); //
+// app.use(cookieParser());//
 
 
 
