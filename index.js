@@ -12,7 +12,7 @@ const productsRouter = require('./src/Presentation/routes/products');
 const googleRouter = require('./src/Presentation/routes/googleAuth');
 const shipmentroute=require('./src/Presentation/routes/shipmentroute');
 const fbRouter = require('./src/Presentation/routes/fb');
-const forgetPasswordMail = require('./src/Presentation/routes/forgetPasswordMail');
+const bioup = require('./src/Presentation/routes/bioup');
 
 const FarmRouter = require('./src/Presentation/routes/farms');
 const PlantRouter = require('./src/Presentation/routes/plants');
@@ -99,7 +99,7 @@ app.use('/animals',AnimalRouter);
 app.use('/rating',ratingRouter)
 app.use('/commands',commandsRouter)
 app.use('/shipment',shipmentroute);
-app.use('/forget', forgetPasswordMail)
+app.use('/forget', bioup)
 
 // connection
 const port = 3000;
