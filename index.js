@@ -26,7 +26,7 @@ const app = express();
 const passport = require('passport'); //
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser')
-// require('./Presentation/middlwares/passport');//
+require('./Presentation/middlwares/passport');//
 
 const cors = require('cors');
 app.use(cors({
