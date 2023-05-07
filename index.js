@@ -64,7 +64,7 @@ app.set("view engine","ejs")
 const session = require('express-session')
 
 
-// app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));//
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));//
 
 app.use(passport.initialize());//
 app.use(passport.session()); //
