@@ -1,7 +1,7 @@
-const User = require("../../Infrastructure/Models/userModel");
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
-const { nextTick } = require("process");
+// const User = require("../../Infrastructure/Models/userModel");
+// const nodemailer = require("nodemailer");
+// const crypto = require("crypto");
+// const { nextTick } = require("process");
 
 // // Create a nodemailer
 // const transporter = nodemailer.createTransport({
