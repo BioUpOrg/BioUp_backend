@@ -1,12 +1,12 @@
 const express = require('express');
-const forgetRouter = express.Router();
+const router = express.Router();
 const forgetPasswordMail = require('../controllers/ForgetPasswordMail');
 
-forgetRouter.put('/' , forgetPasswordMail.sendps);
-forgetRouter.put('/verif',forgetPasswordMail.verifps, );
-forgetRouter.put('/changeps', forgetPasswordMail.changeps);
+router.put('/' , forgetPasswordMail.sendps);
+router.put('/verif',forgetPasswordMail.verifps, );
+router.put('/changeps', forgetPasswordMail.changeps);
 
-module.exports = forgetRouter;
+module.exports = router;
 
 //
 //
