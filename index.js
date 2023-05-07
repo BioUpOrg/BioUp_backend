@@ -37,14 +37,14 @@ app.use(cors({
 
 const { json } = require( "body-parser");
 
-app.use(
-  multer({
-    limits: { fieldSize: 100 * 1024 * 1024 },
-  }).fields([
-    { name: 'file', maxCount: 1 },
-    { name: 'video', maxCount: 1 },
-  ])
-);
+// app.use(
+//   multer({
+//     limits: { fieldSize: 100 * 1024 * 1024 },
+//   }).fields([
+//     { name: 'file', maxCount: 1 },
+//     { name: 'video', maxCount: 1 },
+//   ])
+// );
 
 
 
