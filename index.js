@@ -4,7 +4,7 @@
 
 // Import packages
 const express = require("express");
-const home = require("./routes/home");
+// const home = require("./routes/home");
 const compostsRouter = require('./src/Presentation/routes/composts');
 // const usersRouter = require('./src/Presentation/routes/users');
 const contractroutes=require('./src/Presentation/routes/contractroutes');
@@ -22,7 +22,7 @@ const commandsRouter = require('./src/Presentation/routes/commands');
 
 
 const app = express();
-const multer = require('multer');
+// const multer = require('multer');
 
 const cookieSession = require('cookie-session');
 
@@ -86,7 +86,7 @@ mongoose.connect(
 
 
 // Routes
-app.use("/home", home);
+// app.use("/home", home);
 app.use("/composts", compostsRouter);
 // app.use('/users', usersRouter);
 app.use('/products', productsRouter);
