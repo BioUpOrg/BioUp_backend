@@ -65,8 +65,8 @@ const session = require('express-session')
 
 app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));//
 
-app.use(passport.initialize());//
-app.use(passport.session()); //
+// app.use(passport.initialize());//
+// app.use(passport.session()); //
 app.use(cookieParser());//
 
 
