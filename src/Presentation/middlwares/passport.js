@@ -12,7 +12,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new GoogleStrategy({
 	clientID:"169540758749-uui4lqp02lo7h7dn3bbvsasm9t20bhj8.apps.googleusercontent.com", // Your Credentials here.
 	clientSecret:"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", // Your Credentials here.
-	callbackURL:"http://localhost:3000/google/auth/callback",
+	callbackURL: "https://bio-up-backend-chi.vercel.app/google/auth/callback",
 	passReqToCallback:true
 },
 function(request, accessToken, refreshToken, profile, done) {

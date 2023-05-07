@@ -23,7 +23,7 @@ passport.use(new facebookStrategy({
   // pull in our app id and secret from our auth.js file
   clientID        : "954494482593458",
   clientSecret    : "0ac6ad1851a8b714310a4ff90cbf5e05",
-  callbackURL     : "http://localhost:3000/fb/auth/facebook/callback",
+  callbackURL     : BACK_BASE_URL+"fb/auth/facebook/callback",
   profileFields: ['id', 'displayName', 'name', 'gender', 'picture.type(large)','email']
 
 },// facebook will send back the token and profile

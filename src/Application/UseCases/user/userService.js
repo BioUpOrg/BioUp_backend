@@ -63,7 +63,7 @@ const activationMail = async (mail)=>{
    const update= {activationCode:activationCode};
    const user= await User.findOneAndUpdate({email:mail},update,{new:true});
    const token=utils.generateActivationtoken(mail,activationCode);
-   const URL_ACTIVE_ACCOUNT='http://localhost:4000/users/check/activate/account/'+token;
+   const URL_ACTIVE_ACCOUNT='https://bio-up-front-office.vercel.app/users/check/activate/account/'+token;
    await sendEmail(mail,URL_ACTIVE_ACCOUNT);
    return user;
 }

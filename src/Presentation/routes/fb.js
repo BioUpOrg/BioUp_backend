@@ -1,9 +1,9 @@
 const express = require('express');
 const passport = require("passport");
-const userController = require( "../controllers/facebookConnect");
+// const userController = require( "../controllers/facebookConnect");
 const userService = require("../../Application/UseCases/user/userService");
-const bcrypt = require("bcrypt");
-//const User = require("../../Infrastructure/Models/userModel");
+// const bcrypt = require("bcrypt");
+// const User = require("../../Infrastructure/Models/userModel");
 var a ="";
  
 const userRouter = express.Router();
