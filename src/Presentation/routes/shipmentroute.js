@@ -10,4 +10,5 @@ router.put('/updateMylocation/:agent_id',shipmentController.updateMylocation);
 router.get('/getMyOrderLocation/:trackid',shipmentController.getMyOderLocation);
 router.put('/makeEndOfMission/:idmission',shipmentController.makeEndOfamission);
 router.get('/getAllShipment',shipmentController.getAllshipments);
+router.delete('/deleteShipment/:idshipment',shipmentController.deleteshipmentadmin)
 module.exports = router;
