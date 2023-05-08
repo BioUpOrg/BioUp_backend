@@ -1,18 +1,6 @@
 const mongoose = require('mongoose');
 
 
-const nutrientSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: false,
-  }
-});
-
-
 const compostSchema = new mongoose.Schema({
    name: {
     type: String,
@@ -52,7 +40,10 @@ const compostSchema = new mongoose.Schema({
   manufacturer:{
     type:String,
   },
-  nutrientContent: [nutrientSchema],
+  nutrientContent: {
+    type: [String],
+    required: false
+  },
   certification: {
     type: String,
   },
