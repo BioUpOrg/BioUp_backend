@@ -1,5 +1,5 @@
-const Compost = require('../../../Infrastructure/Models/compostModel');
-const Command = require('../../../Infrastructure/Models/commandModel');
+const Compost = require("../../../Infrastructure/Models/compostModel");
+const Command = require("../../../Infrastructure/Models/commandModel");
 
 async function getAllComposts() {
   try {
@@ -31,7 +31,9 @@ async function addCompost(compostData) {
 
 async function updateCompost(id, compostData) {
   try {
-    const updatedCompost = await Compost.findByIdAndUpdate(id, compostData, { new: true });
+    const updatedCompost = await Compost.findByIdAndUpdate(id, compostData, {
+      new: true,
+    });
     return updatedCompost;
   } catch (error) {
     throw new Error(error);
@@ -42,14 +44,13 @@ async function deleteCompost(id) {
   try {
     const compost = await Compost.findByIdAndDelete(id);
     if (!compost) {
-      throw new Error('Compost not found');
+      throw new Error("Compost not found");
     }
     return compost;
   } catch (error) {
     throw new Error(error);
   }
-};
-
+}
 
 async function getSellerComposts(idSeller) {
   try {
@@ -62,24 +63,18 @@ async function getSellerComposts(idSeller) {
 
 async function getTopRatedComposts(limit) {
   try {
-    const topComposts = await Compost
-      .find()
-      .sort({ rating: -1 })
-      .limit(limit)
-      //.populate('_idSeller', '-password')
+    const topComposts = await Compost.find().sort({ rating: -1 }).limit(limit);
+    //.populate('_idSeller', '-password')
 
     return topComposts;
   } catch (error) {
     throw new Error(error);
   }
-};
+}
 
 async function getRecentlyAddedComposts(limit) {
   try {
-    const composts = await Compost
-      .find()
-      .sort({ createdAt: -1 })
-      .limit(limit)
+    const composts = await Compost.find().sort({ createdAt: -1 }).limit(limit);
 
     return composts;
   } catch (error) {
@@ -92,7 +87,12 @@ async function getTopSelledComposts(limit) {
     const topComposts = await Command.aggregate([
       { $unwind: "$products" },
       { $match: { "products.type": "compost" } },
-      { $group: { _id: "$products.product", totalQuantity: { $sum: "$products.quantity" } } },
+      {
+        $group: {
+          _id: "$products.product",
+          totalQuantity: { $sum: "$products.quantity" },
+        },
+      },
       { $sort: { totalQuantity: -1 } },
       { $limit: limit },
       {
@@ -100,8 +100,8 @@ async function getTopSelledComposts(limit) {
           from: "composts",
           localField: "_id",
           foreignField: "_id",
-          as: "compost"
-        }
+          as: "compost",
+        },
       },
       { $unwind: "$compost" },
       {
@@ -114,15 +114,50 @@ async function getTopSelledComposts(limit) {
           rating: "$compost.rating",
           description: "$compost.description",
           image: "$compost.image",
-          totalQuantity: 1
-        }
-      }
+          totalQuantity: 1,
+        },
+      },
     ]);
     return topComposts;
   } catch (error) {
     throw new Error(error);
   }
 }
+
+// async function getRecommendedComposts(soilType) {
+//   try {
+//     // Retrieve all composts from the database
+//     const allComposts = await Compost.find({});
+
+//     // Define the list of nutrients for each soil type
+//     const soilNutrients = {
+//       'Black_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Magnesium', 'Sulfur', 'Molybdenum'],
+//       'Cinder_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur'],
+//       'Laterite_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc'],
+//       'Peat_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc'],
+//       'Yellow_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc']
+//     };
+
+//     // Find the list of missing nutrients for the given soil type
+//     const missingNutrients = soilNutrients[soilType];
+
+//     // Filter the composts that contain all the missing nutrients
+//     const recommendedComposts = allComposts.filter(compost => {
+//       const compostNutrients = compost.nutrientContent[0].split(",");
+//       console.log("compostNutrients: ", compostNutrients);
+//       const missingNutrientsLowerCase = missingNutrients.map(nutrient => nutrient.toLowerCase());
+//       console.log("missingNutrientsLowerCase: ", missingNutrientsLowerCase);
+//       return missingNutrientsLowerCase.every(nutrient => {
+//         compostNutrients.includes(nutrient)
+//         console.log(nutrient);
+//       });
+//     });
+
+//     return recommendedComposts;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// }
 
 async function getRecommendedComposts(soilType) {
   try {
@@ -131,23 +166,73 @@ async function getRecommendedComposts(soilType) {
 
     // Define the list of nutrients for each soil type
     const soilNutrients = {
-      'Black_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Magnesium', 'Sulfur', 'Molybdenum'],
-      'Cinder_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur'],
-      'Laterite_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc'],
-      'Peat_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc'],
-      'Yellow_Soil': ['Nitrogen', 'Phosphorus', 'Potassium', 'Calcium', 'Magnesium', 'Sulfur', 'Boron', 'Iron', 'Manganese', 'Zinc']
+      Black_Soil: [
+        "Nitrogen",
+        "Phosphorus",
+        "Potassium",
+        "Magnesium",
+        "Sulfur",
+        "Molybdenum",
+      ],
+      Cinder_Soil: [
+        "Nitrogen",
+        "Phosphorus",
+        "Potassium",
+        "Calcium",
+        "Magnesium",
+        "Sulfur",
+      ],
+      Laterite_Soil: [
+        "Nitrogen",
+        "Phosphorus",
+        "Potassium",
+        "Calcium",
+        "Magnesium",
+        "Sulfur",
+        "Boron",
+        "Iron",
+        "Manganese",
+        "Zinc",
+      ],
+      Peat_Soil: [
+        "Nitrogen",
+        "Phosphorus",
+        "Potassium",
+        "Calcium",
+        "Magnesium",
+        "Sulfur",
+        "Boron",
+        "Iron",
+        "Manganese",
+        "Zinc",
+      ],
+      Yellow_Soil: [
+        "Nitrogen",
+        "Phosphorus",
+        "Potassium",
+        "Calcium",
+        "Magnesium",
+        "Sulfur",
+        "Boron",
+        "Iron",
+        "Manganese",
+        "Zinc",
+      ],
     };
 
     // Find the list of missing nutrients for the given soil type
     const missingNutrients = soilNutrients[soilType];
 
     // Filter the composts that contain all the missing nutrients
-    const recommendedComposts = allComposts.filter(compost => {
-      const compostNutrients = compost.nutrientContent.map(nutrient => nutrient.name.toLowerCase());
-      const missingNutrientsLowerCase = missingNutrients.map(nutrient => nutrient.toLowerCase());
-      return missingNutrientsLowerCase.every(nutrient => compostNutrients.includes(nutrient));
+    const recommendedComposts = allComposts.filter((compost) => {
+      const compostNutrients = compost.nutrientContent[0].split(",");
+      const missingNutrientsLowerCase = missingNutrients.map((nutrient) =>
+        nutrient.toLowerCase()
+      );
+      return compostNutrients.some((nutrient) =>
+        missingNutrientsLowerCase.includes(nutrient.trim().toLowerCase())
+      );
     });
-    
 
     return recommendedComposts;
   } catch (error) {
@@ -165,5 +250,5 @@ module.exports = {
   getTopRatedComposts,
   getRecentlyAddedComposts,
   getTopSelledComposts,
-  getRecommendedComposts
+  getRecommendedComposts,
 };
